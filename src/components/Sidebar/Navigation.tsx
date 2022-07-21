@@ -8,7 +8,6 @@ import {
   AMAIcon,
   AppDissectionIcon,
   BookmarksIcon,
-  CameraIcon,
   ExternalLinkIcon,
   FigmaIcon,
   GitHubIcon,
