@@ -23,7 +23,11 @@
     "@apollo/client": "^3.5.8",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/link-schema": "^2.0.0-beta.3",
-    "@auth0/nextjs-auth0": "^1.9.1",
+<<<<<<< HEAD
+    "@authik/nextjs": "0.0.9",
+=======
+    "@auth0/nextjs-auth0": "^1.7.0",
+>>>>>>> parent of 59ff6cd0 (Migrate to Authik (#1966))
     "@graphql-tools/schema": "^8.3.1",
     "@headlessui/react": "^1.4.1",
     "@prisma/client": "^3.9.1",

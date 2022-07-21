@@ -3,24 +3,24 @@ export const baseUrl =
 export const baseEmail = 'hi@brianlovin.com'
 
 export const defaultSEO = {
-  title: 'Brian Lovin',
+  title: 'Arvind Ravi',
   description:
     'Product designer, podcaster, and writer, living in San Francisco.',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: baseUrl,
-    site_name: 'Brian Lovin',
+    site_name: 'Arvind Ravi',
     images: [
       {
         url: `${baseUrl}/static/og/default.png`,
-        alt: 'Brian Lovin',
+        alt: 'Arvind Ravi',
       },
     ],
   },
   twitter: {
-    handle: '@brian_lovin',
-    site: '@brian_lovin',
+    handle: '@arvindravi_',
+    site: '@arvindravi_',
     cardType: 'summary_large_image',
   },
 }
