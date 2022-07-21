@@ -1,22 +1,22 @@
+import { getSession } from '@auth0/nextjs-auth0'
 import fetch from 'isomorphic-unfetch'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { UserRole } from '~/graphql/types.generated'
-import { authik } from '~/lib/authik/server'
 import { prisma } from '~/lib/prisma'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  async function isAuthenticated(req, res) {
-    const { sessionToken } = await authik.verifySessionToken(req)
-    return sessionToken
+  function isAuthenticated(req, res) {
+    const session = getSession(req, res)
+    return session?.user
   }
 
   async function getIsAdmin(req, res) {
-    const sessionToken = await isAuthenticated(req, res)
-    if (!sessionToken) return false
+    const user = isAuthenticated(req, res)
+    if (!user) return false
 
     const viewer = await prisma.user.findUnique({
-      where: { authikId: sessionToken.userId },
+      where: { twitterId: user.sub },
     })
 
     return viewer.role === UserRole.Admin

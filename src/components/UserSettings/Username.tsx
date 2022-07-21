@@ -4,16 +4,14 @@ import Button from '~/components/Button'
 import { Input } from '~/components/Input'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import {
-  GetViewerWithSettingsQuery,
   useEditUserMutation,
   useGetViewerWithSettingsQuery,
 } from '~/graphql/types.generated'
 import { validUsername } from '~/lib/validators'
 
-export function UsernameForm(props: {
-  viewer: GetViewerWithSettingsQuery['viewer']
-}) {
-  const { viewer } = props
+export function UsernameForm() {
+  const { data } = useGetViewerWithSettingsQuery()
+  const { viewer } = data
   const [username, setUsername] = React.useState('')
   const [isEditing, setIsEditing] = React.useState(false)
   const [error, setError] = React.useState(null)

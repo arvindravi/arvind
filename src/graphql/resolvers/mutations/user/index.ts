@@ -5,7 +5,7 @@ import { baseEmail } from '~/config/seo'
 import { CLIENT_URL, IS_PROD } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import { MutationEditUserArgs } from '~/graphql/types.generated'
-import { authik } from '~/lib/authik/server'
+import { deleteUser as deleteUserFromAuth0 } from '~/lib/auth0/deleteUser'
 import { client as postmark } from '~/lib/postmark'
 import { validEmail, validUsername } from '~/lib/validators'
 
@@ -17,7 +17,7 @@ export async function deleteUser(_, __, ctx: Context) {
   }
 
   const user = await prisma.user.findUnique({ where: { id: viewer.id } })
-  await authik.deleteUser(user.authikId)
+  await deleteUserFromAuth0(user.twitterId)
 
   return await prisma.user
     .delete({
