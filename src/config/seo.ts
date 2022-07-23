@@ -1,5 +1,5 @@
 export const baseUrl =
-  process.env.NODE_ENV === 'production' ? 'https://arvind.vercel.app' : ''
+  process.env.NODE_ENV === 'production' ? 'https://arvindravi.com' : ''
 export const baseEmail = 'arvind.ravi@icloud.com'
 
 export const defaultSEO = {

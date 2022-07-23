@@ -40,4 +40,4 @@ rules:
     maxAge: 2592000
     swr: 2592000
     scope: AUTHENTICATED
-originUrl: 'https://arvind.vercel.app/api/graphql'
+originUrl: 'https://arvindravi.com/api/graphql'
