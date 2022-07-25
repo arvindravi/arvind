@@ -141,13 +141,13 @@ export function Intro() {
             <SectionContent>
               <div className="flex flex-col space-y-3">
                 <TableRow
-                  href={'/twitter'}
+                  href={'https://twitter.com/arvindravi_'}
                   title={'Twitter'}
                   subtitle={'Follow'}
                   date={''}
                 />
                 <TableRow
-                  href={'/github'}
+                  href={'https://github.com/arvindravi'}
                   title={'GitHub'}
                   subtitle={'Follow'}
                   date={''}
