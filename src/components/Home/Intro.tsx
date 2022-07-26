@@ -147,12 +147,6 @@ export function Intro() {
                   date={''}
                 />
                 <TableRow
-                  href={'https://github.com/arvindravi'}
-                  title={'GitHub'}
-                  subtitle={'Follow'}
-                  date={''}
-                />
-                <TableRow
                   href={'https://instagram.com/arvindravi_'}
                   title={'Instagram'}
                   subtitle={'Follow'}
