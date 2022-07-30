@@ -12,6 +12,7 @@ const apolloServer = new ApolloServer({
   uploads: false,
   subscriptions: false,
   introspection: true,
+  playground: true,
 })
 
 export const config = {
