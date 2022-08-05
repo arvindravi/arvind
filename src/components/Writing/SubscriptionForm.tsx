@@ -36,9 +36,7 @@ export function WritingSubscriptionForm({ defaultValue = '' }) {
     <div className="space-y-4 p-4">
       <div className="flex flex-col space-y-4">
         <p className="text-tertiary">
-          Get an email whenever I publish new posts. I also publish semi-regular
-          newsletters containing links to interesting articles about design,
-          technology, and startups.
+          Get an email whenever I publish new posts.
         </p>
         <form
           data-cy="subscribe-hn-form"
@@ -69,7 +67,7 @@ export function WritingSubscriptionForm({ defaultValue = '' }) {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://www.getrevue.co/profile/brian_lovin"
+            href="https://www.getrevue.co/profile/arvindravi"
             className="text-primary"
           >
             Revue
