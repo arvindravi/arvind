@@ -5,7 +5,7 @@ export const baseEmail = 'arvind.ravi@icloud.com'
 export const defaultSEO = {
   title: 'Arvind Ravi',
   description:
-    'Product designer, podcaster, and writer, living in San Francisco.',
+    'Software Engineer, writer, amateur photographer, living in London.',
   openGraph: {
     type: 'website',
     locale: 'en_US',
