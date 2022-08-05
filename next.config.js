@@ -1,4 +1,6 @@
-module.exports = {
+const { withPlausibleProxy } = require('next-plausible')
+
+module.exports = withPlausibleProxy()({
   swcMinify: true,
   resolve: {
     fallback: {
@@ -53,22 +55,22 @@ module.exports = {
       },
       {
         source: '/twitter',
-        destination: 'https://twitter.com/brian_lovin',
+        destination: 'https://twitter.com/arvindravi_',
         permanent: true,
         basePath: false,
       },
       {
         source: '/github',
-        destination: 'https://github.com/brianlovin',
+        destination: 'https://github.com/arvindravi',
         permanent: true,
         basePath: false,
       },
       {
         source: '/figma',
-        destination: 'https://figma.com/@brian',
+        destination: 'https://figma.com/@arvindravi',
         permanent: true,
         basePath: false,
       },
     ]
   },
-}
+})

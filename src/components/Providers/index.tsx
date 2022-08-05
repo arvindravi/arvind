@@ -1,10 +1,10 @@
 import { ApolloProvider } from '@apollo/client'
 import { NextPageContext } from 'next'
+import PlausibleProvider from 'next-plausible'
 import * as React from 'react'
 
 import { useApollo } from '~/lib/apollo'
 
-import { FathomProvider } from './Fathom'
 import { SEO } from './SEO'
 import { Toast } from './Toaster'
 
@@ -39,7 +39,13 @@ export function Providers({ children, pageProps }: Props) {
   return (
     <>
       <SEO />
-      <FathomProvider />
+      <PlausibleProvider
+        domain="arvindravi.com"
+        selfHosted={true}
+        trackLocalhost={true}
+        customDomain="triptape.co.uk"
+        children={''}
+      />
       <Toast />
 
       <ApolloProvider client={apolloClient}>
