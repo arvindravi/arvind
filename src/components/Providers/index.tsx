@@ -42,8 +42,6 @@ export function Providers({ children, pageProps }: Props) {
       <PlausibleProvider
         domain="arvindravi.com"
         selfHosted={true}
-        trackLocalhost={true}
-        customDomain="triptape.co.uk"
         children={''}
       />
       <Toast />
