@@ -1,28 +1,28 @@
-datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
-  referentialIntegrity = "prisma"
-}
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
+datasource db {
+  provider             = "postgresql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
 model User {
-  id           String     @id @default(cuid())
-  createdAt    DateTime   @default(now())
-  role         Role       @default(USER)
-  username     String     @unique @db.VarChar(16)
-  twitterId    String     @unique
-  email        String?    @unique
-  pendingEmail String?
-  avatar       String?
+  id           String     @id(map: "idx_24641_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt    DateTime   @default(now()) @db.Timestamptz(6)
+  role         User_role  @default(USER)
+  username     String     @unique(map: "idx_24641_User_username_key") @db.VarChar(16)
+  twitterId    String     @unique(map: "idx_24641_User_twitterId_key") @db.VarChar(191)
+  email        String?    @unique(map: "idx_24641_User_email_key") @db.VarChar(191)
+  pendingEmail String?    @db.VarChar(191)
+  avatar       String?    @db.VarChar(191)
   description  String?    @db.VarChar(256)
   location     String?    @db.VarChar(32)
-  name         String?
-  nickname     String?
+  name         String?    @db.VarChar(191)
+  nickname     String?    @db.VarChar(191)
   comments     Comment[]
   questions    Question[]
   reactions    Reaction[]
@@ -30,126 +30,120 @@ model User {
   stacks       Stack[]
 }
 
-enum Role {
-  BLOCKED
-  USER
-  ADMIN
-}
-
 model Bookmark {
-  id            String     @id @default(cuid())
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  url           String     @unique @db.VarChar(512)
-  host          String?
+  id            String     @id(map: "idx_24593_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt     DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime   @updatedAt @db.Timestamptz(6)
+  url           String     @unique(map: "idx_24593_Bookmark_url_key") @db.VarChar(512)
+  host          String?    @db.VarChar(191)
   title         String?    @db.VarChar(280)
   image         String?    @db.VarChar(512)
   description   String?    @db.VarChar(2048)
-  twitterHandle String?
-  faviconUrl    String?
+  twitterHandle String?    @db.VarChar(191)
+  faviconUrl    String?    @db.VarChar(191)
   comments      Comment[]
   reactions     Reaction[]
   tags          Tag[]
 
-  @@index([host])
+  @@index([host], map: "idx_24593_Bookmark_host_idx")
 }
 
 model Question {
-  id          String     @id @default(cuid())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id          String     @id(map: "idx_24620_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime   @updatedAt @db.Timestamptz(6)
   author      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   title       String     @db.VarChar(256)
   description String?    @db.VarChar(1024)
-  userId      String
+  userId      String     @db.VarChar(191)
   comments    Comment[]
   reactions   Reaction[]
 }
 
 model Comment {
-  id         String     @id @default(cuid())
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  text       String     @db.Text
+  id         String     @id(map: "idx_24599_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt  DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime   @updatedAt @db.Timestamptz(6)
+  text       String
   audio      Audio?
   reactions  Reaction[]
   author     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
+  userId     String     @db.VarChar(191)
   bookmark   Bookmark?  @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
   question   Question?  @relation(fields: [questionId], references: [id], onDelete: Cascade)
   post       Post?      @relation(fields: [postId], references: [id], onDelete: Cascade)
   stack      Stack?     @relation(fields: [stackId], references: [id], onDelete: Cascade)
-  bookmarkId String?
-  questionId String?
-  postId     String?
-  stackId    String?
+  bookmarkId String?    @db.VarChar(191)
+  questionId String?    @db.VarChar(191)
+  postId     String?    @db.VarChar(191)
+  stackId    String?    @db.VarChar(191)
 
-  @@index([bookmarkId])
-  @@index([questionId])
-  @@index([postId])
-  @@index([stackId])
+  @@index([bookmarkId], map: "idx_24599_Comment_bookmarkId_idx")
+  @@index([postId], map: "idx_24599_Comment_postId_idx")
+  @@index([questionId], map: "idx_24599_Comment_questionId_idx")
+  @@index([stackId], map: "idx_24599_Comment_stackId_idx")
 }
 
 model Audio {
-  id            String   @id @default(cuid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id            String   @id(map: "idx_24587_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
   plays         Int
-  waveform      Json
-  url           String
-  transcription String
+  waveform      Json     @db.Json
+  url           String   @db.VarChar(191)
+  transcription String   @db.VarChar(191)
   comment       Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  commentId     String   @unique
+  commentId     String   @unique(map: "idx_24587_Audio_commentId_key") @db.VarChar(191)
 }
 
 model Post {
-  id           String     @id @default(cuid())
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  publishedAt  DateTime?
+  id           String     @id(map: "idx_24608_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt    DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime   @updatedAt @db.Timestamptz(6)
+  publishedAt  DateTime?  @db.Timestamptz(6)
   author       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  slug         String     @unique
+  slug         String     @unique(map: "idx_24608_Post_slug_key") @db.VarChar(191)
   title        String     @db.VarChar(280)
-  text         String     @db.Text
+  text         String
   excerpt      String     @db.VarChar(280)
-  featureImage String?
+  featureImage String?    @db.VarChar(191)
   comments     Comment[]
   reactions    Reaction[]
   history      PostEdit[]
-  userId       String
+  userId       String     @db.VarChar(191)
 
-  @@index([publishedAt])
+  @@index([publishedAt], map: "idx_24608_Post_publishedAt_idx")
 }
 
 model PostEdit {
-  id           String   @id @default(cuid())
-  createdAt    DateTime @default(now())
-  text         String   @db.Text
+  id           String   @id(map: "idx_24614_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  text         String
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
-  featureImage String?
+  featureImage String?  @db.VarChar(191)
   post         Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId       String?
+  postId       String?  @db.VarChar(191)
 
-  @@index([postId])
+  @@index([postId], map: "idx_24614_PostEdit_postId_idx")
 }
 
 model Tag {
-  id        String     @id @default(cuid())
-  name      String     @unique
+  id        String     @id(map: "idx_24638_PRIMARY") @default(cuid()) @db.VarChar(191)
+  name      String     @unique(map: "idx_24638_Tag_name_key") @db.VarChar(191)
   stacks    Stack[]
   bookmarks Bookmark[]
 }
 
 model Stack {
-  id          String     @id @default(cuid())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  name        String
-  slug        String?    @unique
+  id          String     @id(map: "idx_24632_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime   @updatedAt @db.Timestamptz(6)
+  name        String     @db.VarChar(191)
+  slug        String?    @unique(map: "idx_24632_Stack_slug_key") @db.VarChar(191)
   description String     @db.VarChar(280)
-  image       String
-  url         String
+  image       String     @db.VarChar(191)
+  url         String     @db.VarChar(191)
   tags        Tag[]
   comments    Comment[]
   reactions   Reaction[]
@@ -157,36 +151,69 @@ model Stack {
 }
 
 model Reaction {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
+  id         String    @id(map: "idx_24626_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
+  userId     String    @db.VarChar(191)
   bookmark   Bookmark? @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
   question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
   comment    Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   post       Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
   stack      Stack?    @relation(fields: [stackId], references: [id], onDelete: Cascade)
-  commentId  String?
-  bookmarkId String?
-  questionId String?
-  postId     String?
-  stackId    String?
+  commentId  String?   @db.VarChar(191)
+  bookmarkId String?   @db.VarChar(191)
+  questionId String?   @db.VarChar(191)
+  postId     String?   @db.VarChar(191)
+  stackId    String?   @db.VarChar(191)
 
-  @@index([commentId])
-  @@index([bookmarkId])
-  @@index([questionId])
-  @@index([postId])
-  @@index([stackId])
-}
-
-enum EmailSubscriptionType {
-  HACKER_NEWS
+  @@index([bookmarkId], map: "idx_24626_Reaction_bookmarkId_idx")
+  @@index([commentId], map: "idx_24626_Reaction_commentId_idx")
+  @@index([postId], map: "idx_24626_Reaction_postId_idx")
+  @@index([questionId], map: "idx_24626_Reaction_questionId_idx")
+  @@index([stackId], map: "idx_24626_Reaction_stackId_idx")
 }
 
 model EmailSubscription {
-  email String
-  type  EmailSubscriptionType
+  email String                 @db.VarChar(191)
+  type  EmailSubscription_type
 
-  @@unique(fields: [email, type], name: "emailAndType")
-  @@index([email])
+  @@unique([email, type], map: "idx_24605_EmailSubscription_email_type_key")
+  @@index([email], map: "idx_24605_EmailSubscription_email_idx")
+}
+
+model BookmarkToTag {
+  A String @db.VarChar(191)
+  B String @db.VarChar(191)
+
+  @@unique([A, B], map: "idx_24648__BookmarkToTag_AB_unique")
+  @@index([B], map: "idx_24648__BookmarkToTag_B_index")
+  @@map("_BookmarkToTag")
+}
+
+model StackToTag {
+  A String @db.VarChar(191)
+  B String @db.VarChar(191)
+
+  @@unique([A, B], map: "idx_24651__StackToTag_AB_unique")
+  @@index([B], map: "idx_24651__StackToTag_B_index")
+  @@map("_StackToTag")
+}
+
+model StackToUser {
+  A String @db.VarChar(191)
+  B String @db.VarChar(191)
+
+  @@unique([A, B], map: "idx_24654__StackToUser_AB_unique")
+  @@index([B], map: "idx_24654__StackToUser_B_index")
+  @@map("_StackToUser")
+}
+
+enum EmailSubscription_type {
+  HACKER_NEWS
+}
+
+enum User_role {
+  BLOCKED
+  USER
+  ADMIN
 }
