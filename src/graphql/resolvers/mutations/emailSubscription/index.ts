@@ -43,7 +43,7 @@ export async function editEmailSubscription(
       try {
         await prisma.emailSubscription.delete({
           where: {
-            emailAndType: {
+            email_type: {
               email: emailToUse,
               type: EmailSubscriptionType.HackerNews,
             },

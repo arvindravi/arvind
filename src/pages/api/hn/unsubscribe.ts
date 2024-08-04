@@ -37,7 +37,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     await prisma.emailSubscription.delete({
       where: {
-        emailAndType: {
+        email_type: {
           email,
           type: EmailSubscriptionType.HackerNews,
         },
