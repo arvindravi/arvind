@@ -12,7 +12,9 @@
     "generate:watch": "graphql-codegen --watch 'src/graphql/**/*.ts'",
     "postinstall": "yarn generate && prisma generate",
     "db:dev": "pscale connect brianlovin dev --port 3309",
-    "db:prod": "pscale connect brianlovin main --port 3309"
+    "db:prod": "pscale connect brianlovin main --port 3309",
+    "backup": "node backup-script.js",
+    "restore": "node restore-script.js"
   },
   "husky": {
     "hooks": {
@@ -74,6 +76,7 @@
     "remove-markdown": "^0.3.0",
     "slugify": "^1.6.4",
     "string-replace-to-array": "^2.1.0",
+    "ts-node": "^10.9.2",
     "turndown": "^7.1.1",
     "turndown-plugin-gfm": "^1.0.2",
     "unified": "^10.1.1",
@@ -96,7 +99,7 @@
     "@types/dom-mediacapture-record": "^1.0.10",
     "@types/jest": "^27.4.0",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^17.0.6",
+    "@types/node": "^22.9.3",
     "@types/react": "^17.0.38",
     "@types/webrtc": "^0.0.31",
     "@typescript-eslint/parser": "^4.33.0",
@@ -120,10 +123,12 @@
     "prettier": "^2.5.1",
     "prettier-eslint": "^13.0.0",
     "prettier-plugin-prisma": "^3.7.0",
-    "prisma": "^3.9.1",
+    "prisma": "^5.22.0",
     "stylelint-config-recommended": "^6.0.0",
     "tailwindcss": "^3.0.17",
-    "typescript": "^4.4.4",
+    "ts-node-dev": "^2.0.0",
+    "ttypescript": "^1.5.15",
+    "typescript": "^5.7.2",
     "typescript-eslint-parser": "^22.0.0",
     "webpack": "^4.46.0"
   },
