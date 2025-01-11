@@ -89,17 +89,15 @@ export function Intro() {
   const titleRef = React.useRef(null)
 
   return (
-    <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
+    (<Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
       <TitleBar
         magicTitle
         titleRef={titleRef}
         scrollContainerRef={scrollContainerRef}
         title="Home"
       />
-
       {/* Keep this div to trigger the magic scroll */}
       <div className="p-4" ref={titleRef} />
-
       <Detail.ContentContainer>
         <div className="pb-24 space-y-8 md:space-y-16">
           <SectionContainer>
@@ -109,7 +107,7 @@ export function Intro() {
                 <p>
                   Hey, I&apos;m Arvind. I&apos;m an engineer,{' '}
                   <Link href="/writing" passHref>
-                    <a>writer</a>
+                    writer
                   </Link>
                   , software tinkerer, amateur photographer, and a terrible
                   musician.
@@ -172,6 +170,6 @@ export function Intro() {
           </SectionContainer>
         </div>
       </Detail.ContentContainer>
-    </Detail.Container>
-  )
+    </Detail.Container>)
+  );
 }

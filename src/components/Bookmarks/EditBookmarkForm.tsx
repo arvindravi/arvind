@@ -166,7 +166,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
   }
 
   return (
-    <div className="p-4">
+    (<div className="p-4">
       <form className="space-y-3" onSubmit={handleSave}>
         <Input
           placeholder="Title"
@@ -175,15 +175,15 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
           onKeyDown={onKeyDown}
         />
         {state.error && <p className="text-red-500">{state.error}</p>}
-        <Link href={bookmark.url}>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-secondary inline-flex items-center space-x-2 pb-2 text-sm opacity-70 hover:opacity-100"
-          >
-            <LinkIcon className="flex-none" size={12} />
-            <span className="line-clamp-1">{bookmark.url}</span>
-          </a>
+        <Link
+          href={bookmark.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-secondary inline-flex items-center space-x-2 pb-2 text-sm opacity-70 hover:opacity-100">
+
+          <LinkIcon className="flex-none" size={12} />
+          <span className="line-clamp-1">{bookmark.url}</span>
+
         </Link>
 
         <TagPicker
@@ -220,6 +220,6 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
           <Button onClick={handleSave}>Save</Button>
         </div>
       </div>
-    </div>
-  )
+    </div>)
+  );
 }

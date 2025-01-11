@@ -105,14 +105,13 @@ export function Crit() {
   const stripePaymentUrl = 'https://buy.stripe.com/14keVCgDw4fN2KAeUX'
 
   return (
-    <Detail.Container ref={scrollContainerRef}>
+    (<Detail.Container ref={scrollContainerRef}>
       <TitleBar
         magicTitle
         title={'Crit'}
         titleRef={titleRef}
         scrollContainerRef={scrollContainerRef}
       />
-
       <Detail.ContentContainer>
         <Detail.Header>
           <Detail.Title ref={titleRef}>{routes.crit.seo.title}</Detail.Title>
@@ -199,7 +198,7 @@ export function Crit() {
               Hey! I'm Brian, I'm a product designer at GitHub, startup founder,
               and side-project tinkerer. You can learn more about me{' '}
               <Link href="/">
-                <a>here</a>
+                here
               </Link>
               {', '}
               or poke around the other pages on this site to get a feel for my
@@ -325,6 +324,6 @@ export function Crit() {
           </div>
         </div>
       </Detail.ContentContainer>
-    </Detail.Container>
-  )
+    </Detail.Container>)
+  );
 }
