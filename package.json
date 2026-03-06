@@ -1,5 +1,5 @@
 {
-  "name": "brios",
+  "name": "arvindravi",
   "version": "1.0.0",
   "scripts": {
     "dev": "next",
@@ -11,8 +11,8 @@
     "generate": "graphql-codegen",
     "generate:watch": "graphql-codegen --watch 'src/graphql/**/*.ts'",
     "postinstall": "yarn generate && prisma generate",
-    "db:dev": "pscale connect brianlovin dev --port 3309",
-    "db:prod": "pscale connect brianlovin main --port 3309",
+    "db:dev": "pscale connect arvindravi dev --port 3309",
+    "db:prod": "pscale connect arvindravi main --port 3309",
     "backup": "node backup-script.js",
     "restore": "node restore-script.js"
   },
