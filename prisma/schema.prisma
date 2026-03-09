@@ -1,13 +1,10 @@
-datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
-  referentialIntegrity = "prisma"
+generator client {
+  provider = "prisma-client-js"
 }
 
-generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -24,16 +21,10 @@ model User {
   name         String?
   nickname     String?
   comments     Comment[]
+  posts        Post[]
   questions    Question[]
   reactions    Reaction[]
-  posts        Post[]
-  stacks       Stack[]
-}
-
-enum Role {
-  BLOCKED
-  USER
-  ADMIN
+  stacks       Stack[]    @relation("StackToUser")
 }
 
 model Bookmark {
@@ -49,7 +40,7 @@ model Bookmark {
   faviconUrl    String?
   comments      Comment[]
   reactions     Reaction[]
-  tags          Tag[]
+  tags          Tag[]      @relation("BookmarkToTag")
 
   @@index([host])
 }
@@ -58,11 +49,11 @@ model Question {
   id          String     @id @default(cuid())
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  author      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   title       String     @db.VarChar(256)
   description String?    @db.VarChar(1024)
   userId      String
   comments    Comment[]
+  author      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   reactions   Reaction[]
 }
 
@@ -70,19 +61,19 @@ model Comment {
   id         String     @id @default(cuid())
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-  text       String     @db.Text
-  audio      Audio?
-  reactions  Reaction[]
-  author     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text       String
   userId     String
-  bookmark   Bookmark?  @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
-  question   Question?  @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  post       Post?      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  stack      Stack?     @relation(fields: [stackId], references: [id], onDelete: Cascade)
   bookmarkId String?
   questionId String?
   postId     String?
   stackId    String?
+  audio      Audio?
+  bookmark   Bookmark?  @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+  post       Post?      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  question   Question?  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  stack      Stack?     @relation(fields: [stackId], references: [id], onDelete: Cascade)
+  author     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reactions  Reaction[]
 
   @@index([bookmarkId])
   @@index([questionId])
@@ -98,8 +89,8 @@ model Audio {
   waveform      Json
   url           String
   transcription String
-  comment       Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId     String   @unique
+  comment       Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
 }
 
 model Post {
@@ -107,16 +98,16 @@ model Post {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   publishedAt  DateTime?
-  author       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   slug         String     @unique
   title        String     @db.VarChar(280)
-  text         String     @db.Text
+  text         String
   excerpt      String     @db.VarChar(280)
   featureImage String?
-  comments     Comment[]
-  reactions    Reaction[]
-  history      PostEdit[]
   userId       String
+  comments     Comment[]
+  author       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  history      PostEdit[]
+  reactions    Reaction[]
 
   @@index([publishedAt])
 }
@@ -124,12 +115,12 @@ model Post {
 model PostEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
-  text         String   @db.Text
+  text         String
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
   featureImage String?
-  post         Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId       String?
+  post         Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([postId])
 }
@@ -137,8 +128,8 @@ model PostEdit {
 model Tag {
   id        String     @id @default(cuid())
   name      String     @unique
-  stacks    Stack[]
-  bookmarks Bookmark[]
+  bookmarks Bookmark[] @relation("BookmarkToTag")
+  stacks    Stack[]    @relation("StackToTag")
 }
 
 model Stack {
@@ -150,27 +141,27 @@ model Stack {
   description String     @db.VarChar(280)
   image       String
   url         String
-  tags        Tag[]
   comments    Comment[]
   reactions   Reaction[]
-  users       User[]
+  tags        Tag[]      @relation("StackToTag")
+  users       User[]     @relation("StackToUser")
 }
 
 model Reaction {
   id         String    @id @default(cuid())
   createdAt  DateTime  @default(now())
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  bookmark   Bookmark? @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
-  question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  comment    Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  post       Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  stack      Stack?    @relation(fields: [stackId], references: [id], onDelete: Cascade)
   commentId  String?
   bookmarkId String?
   questionId String?
   postId     String?
   stackId    String?
+  bookmark   Bookmark? @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+  comment    Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  post       Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  stack      Stack?    @relation(fields: [stackId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([commentId])
   @@index([bookmarkId])
@@ -179,14 +170,20 @@ model Reaction {
   @@index([stackId])
 }
 
-enum EmailSubscriptionType {
-  HACKER_NEWS
-}
-
 model EmailSubscription {
   email String
   type  EmailSubscriptionType
 
-  @@unique(fields: [email, type], name: "emailAndType")
+  @@unique([email, type], name: "emailAndType")
   @@index([email])
+}
+
+enum Role {
+  BLOCKED
+  USER
+  ADMIN
+}
+
+enum EmailSubscriptionType {
+  HACKER_NEWS
 }

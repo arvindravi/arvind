@@ -19,19 +19,19 @@ function LinkRenderer({ href, ...rest }: any) {
   if (href.startsWith('@')) {
     // link to a mention
     return (
-      <Link href={`/u/${href.slice(1)}`} {...rest}>
-        <a {...rest} />
-      </Link>
-    )
+      (<Link href={`/u/${href.slice(1)}`} {...rest}>
+
+      </Link>)
+    );
   }
   try {
     const url = new URL(href)
     if (url.origin === 'https://brianlovin.com') {
       return (
-        <Link href={href}>
-          <a {...rest} />
-        </Link>
-      )
+        (<Link href={href} {...rest}>
+
+        </Link>)
+      );
     }
     return <a target="_blank" rel="noopener" href={href} {...rest} />
   } catch (e) {
@@ -56,7 +56,7 @@ function getComponentsForVariant(variant) {
             />
           ) : (
             <>{children}</>
-          )
+          );
         },
         code({ node, inline, className, children, ...props }) {
           const language = /language-(\w+)/.exec(className || '')?.[1]
@@ -70,9 +70,9 @@ function getComponentsForVariant(variant) {
             <code className={className} {...props}>
               {children}
             </code>
-          )
+          );
         },
-      }
+      };
     }
     // Questions, comments, descriptions on bookmarks, etc.
     case 'comment': {
@@ -99,9 +99,9 @@ function getComponentsForVariant(variant) {
             <code className={className} {...props}>
               {children}
             </code>
-          )
+          );
         },
-      }
+      };
     }
   }
 }
@@ -122,7 +122,7 @@ export function MarkdownRenderer(props: any) {
   const components = getComponentsForVariant(variant)
 
   return (
-    <Markdown
+    (<Markdown
       {...rest}
       remarkPlugins={[remarkGfm, linkifyRegex(/^(?!.*\bRT\b)(?:.+\s)?@\w+/i)]}
       rehypePlugins={[
@@ -133,6 +133,6 @@ export function MarkdownRenderer(props: any) {
       components={components}
     >
       {children}
-    </Markdown>
-  )
+    </Markdown>)
+  );
 }

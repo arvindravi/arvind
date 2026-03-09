@@ -1,6 +1,6 @@
-import '~/styles/custom-styles.css'
-import '~/styles/prose-styles.css'
-import '~/styles/dracula.css'
+import '../styles/custom-styles.css'
+import '../styles/prose-styles.css'
+import '../styles/dracula.css'
 
 import * as React from 'react'
 
