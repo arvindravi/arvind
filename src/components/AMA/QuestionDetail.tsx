@@ -1,4 +1,3 @@
-import { route } from 'next/dist/server/router'
 import Link from 'next/link'
 import { NextSeo } from 'next-seo'
 import * as React from 'react'
