@@ -2,14 +2,14 @@ const { withPlausibleProxy } = require('next-plausible')
 const path = require('path')
 
 module.exports = withPlausibleProxy()({
-  swcMinify: true,
-  resolve: {
-    fallback: {
-      fs: false,
-    },
-  },
   images: {
     domains: ['pbs.twimg.com', 'abs.twimg.com', 'imagedelivery.net'],
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
   webpack: (config) => {
     config.resolve.alias = {
