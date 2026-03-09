@@ -13,7 +13,7 @@ jobs:
           node-version: '14'
           check-latest: true
       - name: Push schema
-        if: secrets.GRAPHCDN_CI_TOKEN != ''
+        if: ${{ secrets.GRAPHCDN_CI_TOKEN != '' }}
         run: npx graphcdn push --service brios
         env:
           GRAPHCDN_TOKEN: ${{ secrets.GRAPHCDN_CI_TOKEN }}
