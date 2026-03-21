@@ -16,21 +16,13 @@ import { APOLLO_STATE_PROP_NAME, GRAPHQL_ENDPOINT } from '~/graphql/constants'
 
 let apolloClient
 
-function createIsomorphLink({ context }) {
-  if (typeof window === 'undefined') {
-    // These have to imported dynamically, instead of at the root of the page,
-    // in order to make sure that we're not shipping server-side code to the client
-    // eslint-disable-next-line
-    const { SchemaLink } = require('@apollo/link-schema')
-    // eslint-disable-next-line
-    const { schema } = require('~/graphql/schema')
-    return new SchemaLink({ schema, context })
-  } else {
-    return new HttpLink({
-      uri: GRAPHQL_ENDPOINT || '/api/graphql',
-      credentials: 'include',
-    })
-  }
+function createLink() {
+  // Use HttpLink for both client and server side
+  // This simplifies the setup and removes dependency on deprecated @apollo/link-schema
+  return new HttpLink({
+    uri: GRAPHQL_ENDPOINT || '/api/graphql',
+    credentials: 'include',
+  })
 }
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -55,7 +47,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 })
 
 export function createApolloClient({ initialState = {}, context = {} }) {
-  const link = ApolloLink.from([errorLink, createIsomorphLink({ context })])
+  const link = ApolloLink.from([errorLink, createLink()])
   const ssrMode = typeof window === 'undefined'
   const cache = new InMemoryCache({
     typePolicies: {
