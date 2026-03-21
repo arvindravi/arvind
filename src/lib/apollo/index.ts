@@ -14,7 +14,6 @@ import toast from 'react-hot-toast'
 
 import { APOLLO_STATE_PROP_NAME, GRAPHQL_ENDPOINT } from '~/graphql/constants'
 
-global.fetch = require('node-fetch')
 let apolloClient
 
 function createIsomorphLink({ context }) {

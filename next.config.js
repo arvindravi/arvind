@@ -5,12 +5,6 @@ module.exports = withPlausibleProxy()({
   images: {
     domains: ['pbs.twimg.com', 'abs.twimg.com', 'imagedelivery.net'],
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
