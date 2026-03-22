@@ -51,7 +51,10 @@ export function StackImageUploader({ stack, onImageUploaded }) {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxSize: 1000 * 1000, // 1mb
-    accept: '.jpg,.png,.jpeg',
+    accept: {
+      'image/jpeg': ['.jpg', '.jpeg'],
+      'image/png': ['.png'],
+    },
     multiple: false,
   })
 
@@ -60,9 +63,9 @@ export function StackImageUploader({ stack, onImageUploaded }) {
       <div className="relative inline-block h-24 w-24 rounded-lg border border-gray-100 dark:border-gray-900">
         <Image
           src={initialImage || previewImage}
-          width="96"
-          height="96"
-          layout="fixed"
+          width={96}
+          height={96}
+          alt="Stack image"
           quality={100}
           className={`inline-block rounded-lg`}
         />

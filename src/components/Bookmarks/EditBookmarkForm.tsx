@@ -11,6 +11,7 @@ import { GET_BOOKMARK } from '~/graphql/queries/bookmarks'
 import {
   useDeleteBookmarkMutation,
   useEditBookmarkMutation,
+  GetBookmarksQuery,
 } from '~/graphql/types.generated'
 
 export function EditBookmarkForm({ closeModal, bookmark }) {
@@ -101,9 +102,11 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
       deleteBookmark: true,
     },
     update(cache) {
-      const { bookmarks } = cache.readQuery({
+      const data = cache.readQuery<GetBookmarksQuery>({
         query: GET_BOOKMARKS,
       })
+      if (!data?.bookmarks) return
+      const { bookmarks } = data
 
       cache.writeQuery({
         query: GET_BOOKMARK,

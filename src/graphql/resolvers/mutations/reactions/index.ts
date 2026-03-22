@@ -43,7 +43,7 @@ export async function toggleReaction(
   }
 
   const [parentObject, existingReaction] = await Promise.all([
-    prisma[table].findUnique({
+    (prisma as any)[table].findUnique({
       where: { id: refId },
     }),
 

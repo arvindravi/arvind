@@ -8,6 +8,7 @@ import {
   useGetStackQuery,
   useToggleStackUserMutation,
   useViewerQuery,
+  GetStackQuery,
 } from '~/graphql/types.generated'
 import { useWindowFocus } from '~/hooks/useWindowFocus'
 
@@ -46,10 +47,12 @@ export function StackUsedBy(props) {
         },
       },
       update(cache) {
-        const { stack } = cache.readQuery({
+        const data = cache.readQuery<GetStackQuery>({
           query: GET_STACK,
           variables: { slug: props.stack.slug },
         })
+        if (!data?.stack) return
+        const { stack } = data
 
         cache.writeQuery({
           query: GET_STACK,

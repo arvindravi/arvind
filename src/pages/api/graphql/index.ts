@@ -9,8 +9,6 @@ const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
   context,
-  uploads: false,
-  subscriptions: false,
   introspection: true,
 })
 

@@ -20,16 +20,16 @@ export async function editComment(
   const { prisma, viewer } = ctx
 
   if (!text || text.length === 0)
-    throw new UserInputError('Comment can’t be blank')
+    throw new UserInputError('Comment can\'t be blank')
 
   const comment = await prisma.comment.findUnique({
     where: { id },
   })
 
-  if (!comment) throw new UserInputError('Comment doesn’t exist')
+  if (!comment) throw new UserInputError('Comment doesn\'t exist')
 
   if (comment.userId !== viewer?.id) {
-    throw new UserInputError('You can’t edit this comment')
+    throw new UserInputError('You can\'t edit this comment')
   }
 
   return await prisma.comment
@@ -58,7 +58,7 @@ export async function addComment(
   const trimmedText = text.trim()
 
   if (trimmedText.length === 0)
-    throw new UserInputError('Comments can’t be blank')
+    throw new UserInputError('Comments can\'t be blank')
 
   let field
   let table
@@ -93,10 +93,10 @@ export async function addComment(
     }
   }
 
-  const parentObject = await prisma[table].findUnique({ where: { id: refId } })
+  const parentObject = await (prisma as any)[table].findUnique({ where: { id: refId } })
 
   if (!parentObject) {
-    throw new UserInputError('Commenting on something that doesn’t exist')
+    throw new UserInputError('Commenting on something that doesn\'t exist')
   }
 
   if (!viewer.isAdmin) {
@@ -114,7 +114,7 @@ export async function addComment(
         [field]: refId,
       },
     }),
-    prisma[table].update({
+    (prisma as any)[table].update({
       where: {
         id: refId,
       },
@@ -148,7 +148,7 @@ export async function deleteComment(
   if (!comment) return true
   // no permission
   if (comment.userId !== viewer?.id && !viewer?.isAdmin) {
-    throw new UserInputError('You can’t delete this comment')
+    throw new UserInputError('You can\'t delete this comment')
   }
 
   return await prisma.comment

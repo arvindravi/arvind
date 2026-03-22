@@ -9,6 +9,7 @@ import {
   CommentType,
   useAddCommentMutation,
   useViewerQuery,
+  GetCommentsQuery,
 } from '~/graphql/types.generated'
 import { useDebounce } from '~/hooks/useDebounce'
 import { timestampToCleanTime } from '~/lib/transformers'
@@ -47,10 +48,12 @@ export function CommentForm({ refId, type, openModal }: Props) {
       },
     },
     update(cache, { data: { addComment } }) {
-      const { comments } = cache.readQuery({
+      const data = cache.readQuery<GetCommentsQuery>({
         query: GET_COMMENTS,
         variables: { refId, type },
       })
+      if (!data?.comments) return
+      const { comments } = data
 
       cache.writeQuery({
         query: GET_COMMENTS,

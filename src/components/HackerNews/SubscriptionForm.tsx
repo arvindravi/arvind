@@ -11,6 +11,7 @@ import {
   useEditEmailSubscriptionMutation,
   useEditUserMutation,
   useGetViewerWithSettingsQuery,
+  GetViewerWithSettingsQuery,
 } from '~/graphql/types.generated'
 import { validEmail } from '~/lib/validators'
 
@@ -36,9 +37,11 @@ export function HackerNewsSubscriptionForm() {
 
   const [setPendingEmail, setPendingEmailResponse] = useEditUserMutation({
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const data = cache.readQuery<GetViewerWithSettingsQuery>({
         query: GET_VIEWER_SETTINGS,
       })
+      if (!data?.viewer) return
+      const { viewer } = data
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,

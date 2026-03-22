@@ -6,13 +6,13 @@ import { UserRole } from '~/graphql/types.generated'
 import { prisma } from '~/lib/prisma'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  function isAuthenticated(req, res) {
-    const session = getSession(req, res)
+  async function isAuthenticated(req, res) {
+    const session = await getSession(req, res)
     return session?.user
   }
 
   async function getIsAdmin(req, res) {
-    const user = isAuthenticated(req, res)
+    const user = await isAuthenticated(req, res)
     if (!user) return false
 
     const viewer = await prisma.user.findUnique({

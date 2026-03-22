@@ -14,17 +14,9 @@ export function Toast() {
         duration: 2000,
         success: {
           duration: 2000,
-          theme: {
-            primary: 'green',
-            secondary: 'black',
-          },
         },
         error: {
           duration: 2000,
-          theme: {
-            primary: 'red',
-            secondary: 'white',
-          },
         },
       }}
     />

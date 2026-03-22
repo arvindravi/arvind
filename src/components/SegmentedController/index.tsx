@@ -1,6 +1,6 @@
 // learned from https://samuelkraft.com/blog/segmented-control-framer-motion
 import { AnimateSharedLayout, motion } from 'framer-motion'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 type Item = {
   id: string
@@ -17,7 +17,7 @@ const SegmentedControl = ({
   onSetActiveItem,
   items,
   active,
-}: SegmentedControlProps): JSX.Element => {
+}: SegmentedControlProps): React.ReactElement => {
   const [activeItem, setActiveitem] = useState(active)
 
   function onChange(i) {

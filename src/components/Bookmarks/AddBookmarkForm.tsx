@@ -10,6 +10,7 @@ import { GET_BOOKMARKS } from '~/graphql/queries/bookmarks'
 import {
   useAddBookmarkMutation,
   useGetBookmarksQuery,
+  GetBookmarksQuery,
 } from '~/graphql/types.generated'
 
 export function AddBookmarkForm({ closeModal }) {
@@ -31,7 +32,9 @@ export function AddBookmarkForm({ closeModal }) {
     addBookmark({
       variables: { data: { url, tag } },
       update(cache, { data: { addBookmark } }) {
-        const { bookmarks } = cache.readQuery({ query })
+        const data = cache.readQuery<GetBookmarksQuery>({ query })
+        if (!data?.bookmarks) return
+        const { bookmarks } = data
         return cache.writeQuery({
           query,
           data: {

@@ -8,6 +8,7 @@ import { GET_VIEWER_SETTINGS } from '~/graphql/queries/viewer'
 import {
   useEditUserMutation,
   useGetViewerWithSettingsQuery,
+  GetViewerWithSettingsQuery,
 } from '~/graphql/types.generated'
 
 export function EmailForm() {
@@ -25,9 +26,11 @@ export function EmailForm() {
       },
     },
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const data = cache.readQuery<GetViewerWithSettingsQuery>({
         query: GET_VIEWER_SETTINGS,
       })
+      if (!data?.viewer) return
+      const { viewer } = data
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
@@ -52,9 +55,11 @@ export function EmailForm() {
       },
     },
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const data = cache.readQuery<GetViewerWithSettingsQuery>({
         query: GET_VIEWER_SETTINGS,
       })
+      if (!data?.viewer) return
+      const { viewer } = data
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
@@ -79,9 +84,11 @@ export function EmailForm() {
       },
     },
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const data = cache.readQuery<GetViewerWithSettingsQuery>({
         query: GET_VIEWER_SETTINGS,
       })
+      if (!data?.viewer) return
+      const { viewer } = data
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,

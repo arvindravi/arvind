@@ -11,6 +11,7 @@ import {
   CommentType,
   useDeleteCommentMutation,
   useEditCommentMutation,
+  GetCommentsQuery,
 } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
@@ -39,10 +40,12 @@ export const Comment = React.memo(function MemoComment({
       deleteComment: true,
     },
     update(cache) {
-      const { comments } = cache.readQuery({
+      const data = cache.readQuery<GetCommentsQuery>({
         query: GET_COMMENTS,
         variables: { refId, type },
       })
+      if (!data?.comments) return
+      const { comments } = data
 
       cache.writeQuery({
         query: GET_COMMENTS,

@@ -32,9 +32,10 @@ export function Testimonial({
           rel="noopener noreferrer">
 
           <Image
-            width="56"
-            height="56"
+            width={56}
+            height={56}
             src={testimonial.avatarSrc}
+            alt={testimonial.name}
             className="flex-none bg-gray-300 rounded-full"
           />
 
@@ -52,8 +53,9 @@ export function Testimonial({
           <div className="flex items-center space-x-1.5">
             <Image
               src={testimonial.productLogo}
-              width="16"
-              height="16"
+              width={16}
+              height={16}
+              alt={testimonial.productName}
               className="rounded"
             />
             <a

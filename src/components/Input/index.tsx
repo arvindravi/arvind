@@ -8,13 +8,13 @@ export function Input(props) {
   return <input className={styles} {...props} />
 }
 
-export function Textarea({ maxRows = 8, rows = 1, ...props }) {
+export function Textarea({ maxRows = 8, rows = 1, ...props }: { maxRows?: number; rows?: number } & React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <TextareaAutosize
       maxRows={maxRows}
       rows={rows}
       className={`${styles} block`}
-      {...props}
+      {...(props as any)}
     />
   )
 }
