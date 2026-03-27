@@ -1,5 +1,6 @@
 // learned from https://samuelkraft.com/blog/segmented-control-framer-motion
 import { AnimateSharedLayout, motion } from 'framer-motion'
+import type { JSX } from 'react'
 import { useState } from 'react'
 
 type Item = {

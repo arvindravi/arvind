@@ -40,7 +40,7 @@ export default [
   },
   {
     description:
-      'If you swipe right on the home screen, Google Now starts to fade into view. Notice the menu icon slide into place in the search bar once you reach the halfway point. That icon, when pressed from the Google Now view, brings up your user settings and Google Now preferences.\r\n\r\nIt’s worth mentioning that Lollipop still has a few small consistency issues that are lingering, but will no doubt be cleaned up in future releases. For example, here’s the slideout menus in the Play Store versus Google Now:\r\n\r\n<img src="https://brianlovin.s3.amazonaws.com/lollipop-3.png" width="100%">',
+      'If you swipe right on the home screen, Google Now starts to fade into view. Notice the menu icon slide into place in the search bar once you reach the halfway point. That icon, when pressed from the Google Now view, brings up your user settings and Google Now preferences.\r\n\r\nIt’s worth mentioning that Lollipop still has a few small consistency issues that are lingering, but will no doubt be cleaned up in future releases. For example, here’s the slideout menus in the Play Store versus Google Now:\r\n\r\n<img src="https://arvindravi.com/static/img/lollipop-3.png" width="100%">',
     title: 'Google Now',
     media: [
       'https://videodelivery.net/b5c19ac159693981bc496e077962b8e6/downloads/default.mp4',
@@ -120,7 +120,7 @@ export default [
   },
   {
     description:
-      'I didn’t get the best recording here, so my apologies if it’s confusing! The key thing I wanted to highlight was that this settings view is really powerful. I can quickly toggle networking services on or off, turn on the flashlight or lock the screen orientation. What is not obvious, however, is that ‘Bluetooth’ and the wifi network name (Wu-Tang Lan, in my case) are separate labels which can open their own respective settings view. This isn’t really clear until you start tapping around.\r\n\r\nOne other cool thing that Dan pointed out to me was how different apps can secure a place in the settings pulldown. In this case, a screen capture app and a mobile hotspot automatically get added to this settings view. It’s still not quite clear how to customize these icons here, or delete them if I’d rather not have them shown, but I love this flexibility of the OS to accommodate each individual user:\r\n\r\n<img src="https://brianlovin.s3.amazonaws.com/lollipop-4.png" width="100%">',
+      'I didn’t get the best recording here, so my apologies if it’s confusing! The key thing I wanted to highlight was that this settings view is really powerful. I can quickly toggle networking services on or off, turn on the flashlight or lock the screen orientation. What is not obvious, however, is that ‘Bluetooth’ and the wifi network name (Wu-Tang Lan, in my case) are separate labels which can open their own respective settings view. This isn’t really clear until you start tapping around.\r\n\r\nOne other cool thing that Dan pointed out to me was how different apps can secure a place in the settings pulldown. In this case, a screen capture app and a mobile hotspot automatically get added to this settings view. It’s still not quite clear how to customize these icons here, or delete them if I’d rather not have them shown, but I love this flexibility of the OS to accommodate each individual user:\r\n\r\n<img src="https://arvindravi.com/static/img/lollipop-4.png" width="100%">',
     title: 'Settings pulldown',
     media: [
       'https://videodelivery.net/9930aef34e5920600fc541b0874bfb44/downloads/default.mp4',
@@ -144,7 +144,7 @@ export default [
   },
   {
     description:
-      'Camera app design must be insanely fun, but impossibly challenging. Giving people easy access to controls and configurations without obscuring the view itself can be a tricky balance. I thought I’d share a comparison shot of Lollipop vs. iOS 8 below – of course, Android on the left and iOS on the right:\r\n\r\n<img src="https://brianlovin.s3.amazonaws.com/lollipop-2.png" width="100%">\r\n\r\nI suppose there’s no right answer to which design is better. Both make it easy to access settings and provide a clear way to snap a photo; that’s the most important thing. But for me iOS has built the interface in such a way that I feel in control while using my camera, but not bogged down in the configuration. That’s really important to casuals like myself.\r\n\r\nThe video above captures the camera app opening on Lollipop. The icon animations give context to users and helps them to know where more settings can be found. I thought that it could have been a nice touch to have the camera icon in the center of the screen during the loading transition move down to become the actual camera button rather than flying up and out of view.',
+      'Camera app design must be insanely fun, but impossibly challenging. Giving people easy access to controls and configurations without obscuring the view itself can be a tricky balance. I thought I’d share a comparison shot of Lollipop vs. iOS 8 below – of course, Android on the left and iOS on the right:\r\n\r\n<img src="https://arvindravi.com/static/img/lollipop-2.png" width="100%">\r\n\r\nI suppose there’s no right answer to which design is better. Both make it easy to access settings and provide a clear way to snap a photo; that’s the most important thing. But for me iOS has built the interface in such a way that I feel in control while using my camera, but not bogged down in the configuration. That’s really important to casuals like myself.\r\n\r\nThe video above captures the camera app opening on Lollipop. The icon animations give context to users and helps them to know where more settings can be found. I thought that it could have been a nice touch to have the camera icon in the center of the screen during the loading transition move down to become the actual camera button rather than flying up and out of view.',
     title: 'Camera',
     media: [
       'https://videodelivery.net/dabdf13df0e7ec3a5ea3c48ed6ae84b7/downloads/default.mp4',
@@ -160,7 +160,7 @@ export default [
   },
   {
     description:
-      'I’ll end this post by looking more at Lollipop’s notification design. I have a hunch that I’ve only scratched the surface here on what developers are doing with interactive notifications, so if you know of any other cool ones give me a shout on [Twitter](https://twitter.com/brian_lovin)!\r\n\r\nIn this video, I have a few Twitter notifications stacked up. If I tap, it expands the notification giving me a complete at-a-glance view of what I missed in that specific app. The motion here is gorgeous and the way the notifications react to one another feels right.',
+      'I’ll end this post by looking more at Lollipop’s notification design. I have a hunch that I’ve only scratched the surface here on what developers are doing with interactive notifications, so if you know of any other cool ones give me a shout on [Twitter](https://twitter.com/arvindravi_)!\r\n\r\nIn this video, I have a few Twitter notifications stacked up. If I tap, it expands the notification giving me a complete at-a-glance view of what I missed in that specific app. The motion here is gorgeous and the way the notifications react to one another feels right.',
     title: 'Expanded notifications',
     media: [
       'https://videodelivery.net/ea3f06c0867d288efb4f7a68e3082035/downloads/default.mp4',
@@ -176,7 +176,7 @@ export default [
   },
   {
     description:
-      'That’s it for part one of this Lollipop Design Details! I hope you’ve enjoyed the videos and thoughts here – give a shout on [Twitter](https://twitter.com/brian_lovin) if I’ve missed anything at all! Part 2 will be coming soon to take a closer look at some of the stock Android apps – if you’d like to be emailed about future posts, sign up for the [free newsletter](http://eepurl.com/Ox2I9)!',
+      'That’s it for part one of this Lollipop Design Details! I hope you’ve enjoyed the videos and thoughts here – give a shout on [Twitter](https://twitter.com/arvindravi_) if I’ve missed anything at all! Part 2 will be coming soon to take a closer look at some of the stock Android apps – if you’d like to be emailed about future posts, sign up for the [free newsletter](http://eepurl.com/Ox2I9)!',
     title: '',
     media: null,
   },

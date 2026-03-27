@@ -46,10 +46,12 @@ export function StackUsedBy(props) {
         },
       },
       update(cache) {
-        const { stack } = cache.readQuery({
+        const stackData = cache.readQuery<{ stack: any }>({
           query: GET_STACK,
           variables: { slug: props.stack.slug },
         })
+        const stack = stackData?.stack
+        if (!stack) return
 
         cache.writeQuery({
           query: GET_STACK,

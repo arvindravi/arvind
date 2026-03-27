@@ -101,9 +101,10 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
       deleteBookmark: true,
     },
     update(cache) {
-      const { bookmarks } = cache.readQuery({
+      const bookmarksData = cache.readQuery<{ bookmarks: any }>({
         query: GET_BOOKMARKS,
       })
+      const bookmarks = bookmarksData?.bookmarks
 
       cache.writeQuery({
         query: GET_BOOKMARK,

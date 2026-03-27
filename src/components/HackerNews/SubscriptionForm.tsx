@@ -36,9 +36,11 @@ export function HackerNewsSubscriptionForm() {
 
   const [setPendingEmail, setPendingEmailResponse] = useEditUserMutation({
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const data = cache.readQuery<{ viewer: any }>({
         query: GET_VIEWER_SETTINGS,
       })
+      const viewer = data?.viewer
+      if (!viewer) return
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,

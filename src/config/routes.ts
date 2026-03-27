@@ -24,16 +24,6 @@ const routes = {
       url: 'writing',
     }),
   },
-  crit: {
-    label: 'Crit',
-    path: '/crit',
-    seo: extendSEO({
-      title: 'Crit',
-      description: 'A comprehensive product design health report.',
-      image: 'og/crit.png',
-      url: 'crit',
-    }),
-  },
   hn: {
     label: 'HN',
     path: '/hn',

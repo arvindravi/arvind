@@ -76,13 +76,6 @@ const workHistory = [
   },
 ]
 
-const speakingData = [
-  {
-    href: 'https://uibreakfast.com/228-design-advisory-with-brian-lovin/',
-    title: 'UI Breakfast',
-    date: "Dec '21",
-  },
-]
 
 export function Intro() {
   const scrollContainerRef = React.useRef(null)

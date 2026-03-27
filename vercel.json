@@ -1,5 +1,5 @@
 {
   "name": "arvind",
-  "buildCommand": "npm run build",
+  "buildCommand": "npx graphql-codegen && npx prisma generate && npm run build",
   "installCommand": "npm install --legacy-peer-deps --ignore-scripts"
 }

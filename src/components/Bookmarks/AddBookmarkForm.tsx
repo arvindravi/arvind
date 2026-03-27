@@ -31,7 +31,9 @@ export function AddBookmarkForm({ closeModal }) {
     addBookmark({
       variables: { data: { url, tag } },
       update(cache, { data: { addBookmark } }) {
-        const { bookmarks } = cache.readQuery({ query })
+        const data = cache.readQuery<{ bookmarks: any }>({ query })
+        const bookmarks = data?.bookmarks
+        if (!bookmarks) return
         return cache.writeQuery({
           query,
           data: {
