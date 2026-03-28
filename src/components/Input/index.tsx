@@ -14,6 +14,8 @@ export function Textarea({ maxRows = 8, rows = 1, ...props }) {
       maxRows={maxRows}
       rows={rows}
       className={`${styles} block`}
+      onPointerEnterCapture={undefined}
+      onPointerLeaveCapture={undefined}
       {...props}
     />
   )

@@ -47,10 +47,11 @@ export function CommentForm({ refId, type, openModal }: Props) {
       },
     },
     update(cache, { data: { addComment } }) {
-      const { comments } = cache.readQuery({
+      const data = cache.readQuery<{ comments: any[] }>({
         query: GET_COMMENTS,
         variables: { refId, type },
       })
+      const comments = data?.comments ?? []
 
       cache.writeQuery({
         query: GET_COMMENTS,

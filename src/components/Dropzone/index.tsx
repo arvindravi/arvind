@@ -62,7 +62,7 @@ export function Dropzone(props: DropzoneProps) {
     multiple: false,
     noClick: true,
     maxSize: 1000 * 1000 * 3, // 3mb
-    accept: ['image/jpeg', 'image/png', 'image/gif'],
+    accept: { 'image/jpeg': [], 'image/png': [], 'image/gif': [] },
   })
 
   return (

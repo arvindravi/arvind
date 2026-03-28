@@ -6,7 +6,7 @@ export function FathomProvider() {
   const router = useRouter()
   useEffect(() => {
     Fathom.load(process.env.NEXT_PUBLIC_FATHOM_SITE_ID, {
-      includedDomains: ['brianlovin.com'],
+      includedDomains: ['arvindravi.com'],
       excludedDomains: ['vercel.app,localhost'],
       url: process.env.NEXT_PUBLIC_FATHOM_CUSTOM_URL,
       spa: 'auto',

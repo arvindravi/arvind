@@ -43,7 +43,8 @@ export async function toggleReaction(
   }
 
   const [parentObject, existingReaction] = await Promise.all([
-    prisma[table].findUnique({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (prisma as any)[table].findUnique({
       where: { id: refId },
     }),
 

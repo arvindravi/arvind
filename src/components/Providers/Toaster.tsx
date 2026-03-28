@@ -14,16 +14,14 @@ export function Toast() {
         duration: 2000,
         success: {
           duration: 2000,
-          theme: {
-            primary: 'green',
-            secondary: 'black',
+          style: {
+            color: 'green',
           },
         },
         error: {
           duration: 2000,
-          theme: {
-            primary: 'red',
-            secondary: 'white',
+          style: {
+            color: 'red',
           },
         },
       }}

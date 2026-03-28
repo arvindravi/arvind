@@ -1,5 +1,5 @@
 {
-  "name": "brios",
+  "name": "arvindravi-site",
   "version": "1.0.0",
   "scripts": {
     "dev": "next",
@@ -11,8 +11,9 @@
     "generate": "graphql-codegen",
     "generate:watch": "graphql-codegen --watch 'src/graphql/**/*.ts'",
     "postinstall": "yarn generate && prisma generate",
-    "db:dev": "pscale connect brianlovin dev --port 3309",
-    "db:prod": "pscale connect brianlovin main --port 3309",
+    "prebuild": "npx graphql-codegen && prisma generate",
+    "db:dev": "pscale connect arvindravi dev --port 3309",
+    "db:prod": "pscale connect arvindravi main --port 3309",
     "backup": "node backup-script.js",
     "restore": "node restore-script.js"
   },
@@ -23,7 +24,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
-    "@auth0/nextjs-auth0": "^4.16.0",
+    "@auth0/nextjs-auth0": "^3.5.0",
     "@graphql-tools/schema": "^10.0.16",
     "@headlessui/react": "^2.2.0",
     "@prisma/client": "^6.2.1",
@@ -106,7 +107,7 @@
     "autoprefixer": "^10.4.20",
     "babel-eslint": "^10.1.0",
     "cypress": "^13.17.0",
-    "eslint": "^9.18.0",
+    "eslint": "^8.56.0",
     "eslint-config-next": "^15.1.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^4.1.0",

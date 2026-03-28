@@ -5,13 +5,13 @@ import { prisma } from '~/lib/prisma'
 
 import { User, UserRole } from '../types.generated'
 
-export function isAuthenticated(req, res) {
-  const session = getSession(req, res)
+export async function isAuthenticated(req, res) {
+  const session = await getSession(req, res)
   return session?.user
 }
 
 export async function getViewer(req, res) {
-  const user = isAuthenticated(req, res)
+  const user = await isAuthenticated(req, res)
 
   let viewer = null
   if (user) {

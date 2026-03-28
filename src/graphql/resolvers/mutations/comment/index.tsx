@@ -93,7 +93,8 @@ export async function addComment(
     }
   }
 
-  const parentObject = await prisma[table].findUnique({ where: { id: refId } })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const parentObject = await (prisma as any)[table].findUnique({ where: { id: refId } })
 
   if (!parentObject) {
     throw new UserInputError('Commenting on something that doesn’t exist')
@@ -114,7 +115,8 @@ export async function addComment(
         [field]: refId,
       },
     }),
-    prisma[table].update({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (prisma as any)[table].update({
       where: {
         id: refId,
       },

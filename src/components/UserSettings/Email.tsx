@@ -25,9 +25,11 @@ export function EmailForm() {
       },
     },
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const data = cache.readQuery<{ viewer: any }>({
         query: GET_VIEWER_SETTINGS,
       })
+      const viewer = data?.viewer
+      if (!viewer) return
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
@@ -52,9 +54,11 @@ export function EmailForm() {
       },
     },
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const data = cache.readQuery<{ viewer: any }>({
         query: GET_VIEWER_SETTINGS,
       })
+      const viewer = data?.viewer
+      if (!viewer) return
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
@@ -79,14 +83,16 @@ export function EmailForm() {
       },
     },
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const data = cache.readQuery<{ viewer: any }>({
         query: GET_VIEWER_SETTINGS,
       })
+      const viewerData = data?.viewer
+      if (!viewerData) return
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
         data: {
-          viewer,
+          viewer: viewerData,
         },
       })
     },
