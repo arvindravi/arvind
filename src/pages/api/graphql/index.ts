@@ -1,15 +1,19 @@
-import { ApolloServer } from 'apollo-server-micro'
+import { ApolloServer } from '@apollo/server'
+import { startServerAndCreateNextHandler } from '@as-integrations/next'
 
-import context from '~/graphql/context'
+import { getContext } from '~/graphql/context'
 import withRateLimit from '~/graphql/helpers/withRateLimit'
 import resolvers from '~/graphql/resolvers'
 import typeDefs from '~/graphql/typeDefs'
 
-const apolloServer = new ApolloServer({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context,
   introspection: true,
+})
+
+const handler = startServerAndCreateNextHandler(server, {
+  context: async (req, res) => getContext(req, res),
 })
 
 export const config = {
@@ -17,7 +21,5 @@ export const config = {
     bodyParser: false,
   },
 }
-
-const handler = apolloServer.createHandler({ path: '/api/graphql' })
 
 export default withRateLimit(handler)

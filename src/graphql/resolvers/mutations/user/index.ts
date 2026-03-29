@@ -1,4 +1,4 @@
-import { UserInputError } from 'apollo-server-errors'
+import { GraphQLError } from 'graphql'
 import jwt from 'jsonwebtoken'
 
 import { baseEmail } from '~/config/seo'
@@ -13,7 +13,7 @@ export async function deleteUser(_, __, ctx: Context) {
   const { prisma, viewer } = ctx
 
   if (viewer.isAdmin) {
-    throw new UserInputError('Admins can’t be deleted')
+    throw new GraphQLError('Admins can’t be deleted', { extensions: { code: 'BAD_USER_INPUT' } })
   }
 
   const user = await prisma.user.findUnique({ where: { id: viewer.id } })
@@ -33,7 +33,7 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
 
   if (username) {
     if (!validUsername(username)) {
-      throw new UserInputError('Usernames can be 16 characters long')
+      throw new GraphQLError('Usernames can be 16 characters long', { extensions: { code: 'BAD_USER_INPUT' } })
     }
 
     const user = await prisma.user.findUnique({
@@ -41,7 +41,7 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
     })
 
     if (user && user.id !== viewer.id) {
-      throw new UserInputError('That username is taken')
+      throw new GraphQLError('That username is taken', { extensions: { code: 'BAD_USER_INPUT' } })
     }
 
     return await prisma.user.update({
@@ -52,7 +52,7 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
 
   if (email) {
     if (!validEmail(email)) {
-      throw new UserInputError('That email is not valid')
+      throw new GraphQLError('That email is not valid', { extensions: { code: 'BAD_USER_INPUT' } })
     }
 
     const userByEmail = await prisma.user.findUnique({
@@ -60,7 +60,7 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
     })
 
     if (userByEmail && userByEmail.id !== viewer.id) {
-      throw new UserInputError('That email is taken')
+      throw new GraphQLError('That email is taken', { extensions: { code: 'BAD_USER_INPUT' } })
     }
 
     // the user is updating their email to be the same thing

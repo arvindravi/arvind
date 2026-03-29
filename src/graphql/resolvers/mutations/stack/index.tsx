@@ -1,4 +1,4 @@
-import { UserInputError } from 'apollo-server-micro'
+import { GraphQLError } from 'graphql'
 import fetch from 'isomorphic-unfetch'
 import slugify from 'slugify'
 
@@ -18,10 +18,10 @@ export async function editStack(_, args: MutationEditStackArgs, ctx: Context) {
   const { prisma } = ctx
 
   if (!name || name.length === 0)
-    throw new UserInputError('Stack must have a name')
+    throw new GraphQLError('Stack must have a name', { extensions: { code: 'BAD_USER_INPUT' } })
 
   if (!url || url.length === 0)
-    throw new UserInputError('Stack must have a URL')
+    throw new GraphQLError('Stack must have a URL', { extensions: { code: 'BAD_USER_INPUT' } })
 
   /*
     Keep our image storage somewhat clean by deleting unused images
@@ -85,7 +85,7 @@ export async function editStack(_, args: MutationEditStackArgs, ctx: Context) {
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to edit stack')
+      throw new GraphQLError('Unable to edit stack', { extensions: { code: 'BAD_USER_INPUT' } })
     })
 }
 
@@ -94,7 +94,7 @@ export async function addStack(_, args: MutationAddStackArgs, ctx: Context) {
   const { url, name, description, image, tag } = data
   const { prisma } = ctx
 
-  if (!validUrl(url)) throw new UserInputError('URL was invalid')
+  if (!validUrl(url)) throw new GraphQLError('URL was invalid', { extensions: { code: 'BAD_USER_INPUT' } })
 
   const tags = tag
     ? {
@@ -123,7 +123,7 @@ export async function addStack(_, args: MutationAddStackArgs, ctx: Context) {
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to add stack')
+      throw new GraphQLError('Unable to add stack', { extensions: { code: 'BAD_USER_INPUT' } })
     })
 }
 
@@ -165,7 +165,7 @@ export async function deleteStack(
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to delete stack')
+      throw new GraphQLError('Unable to delete stack', { extensions: { code: 'BAD_USER_INPUT' } })
     })
 }
 
