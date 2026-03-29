@@ -38,6 +38,7 @@
     "@types/react-dom": "^19.0.2",
     "@typescript-eslint/eslint-plugin": "^8.19.1",
     "apollo-server-micro": "^3.13.0",
+    "micro": "^9.3.4",
     "cheerio": "^1.0.0",
     "cryptr": "^6.3.0",
     "date-fns": "^4.1.0",
