@@ -1,5 +1,5 @@
 {
   "name": "arvind",
-  "buildCommand": "npx graphql-codegen && npx prisma generate && npx prisma migrate deploy && npm run build",
+  "buildCommand": "npx graphql-codegen && npx prisma generate && (npx prisma migrate resolve --applied 20241123215025_init || true) && npx prisma migrate deploy && npm run build",
   "installCommand": "npm install --legacy-peer-deps --ignore-scripts"
 }
