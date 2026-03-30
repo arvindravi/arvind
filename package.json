@@ -24,8 +24,6 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
-    "@apollo/server": "^4.13.0",
-    "@as-integrations/next": "^3.2.0",
     "@auth0/nextjs-auth0": "^3.5.0",
     "@graphql-tools/schema": "^10.0.16",
     "@headlessui/react": "^2.2.0",
