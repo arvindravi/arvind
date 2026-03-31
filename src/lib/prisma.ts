@@ -8,16 +8,21 @@ declare global {
   var prisma: PrismaClient | undefined
 }
 
-function createPrismaClient() {
-  if (process.env.NODE_ENV === 'production') {
+function createPrismaClient(): PrismaClient {
+  const databaseUrl = process.env.DATABASE_URL
+
+  if (process.env.NODE_ENV === 'production' && databaseUrl) {
     // Use the Neon serverless WebSocket adapter in production (Vercel).
     // This avoids unreliable TCP connections from serverless functions.
+    // Only uses the Neon adapter when DATABASE_URL is actually present so
+    // that preview deployments without the env var don't crash at module load.
     neonConfig.webSocketConstructor = ws
-    const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL })
+    const adapter = new PrismaNeon({ connectionString: databaseUrl })
     return new PrismaClient({ adapter } as any)
   }
 
-  // In development use a regular Prisma client (works with any Postgres).
+  // Development or production without DATABASE_URL — fall back to standard
+  // PrismaClient (will fail gracefully at query time, not at import time).
   return new PrismaClient({})
 }
 
