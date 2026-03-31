@@ -1,15 +1,18 @@
 import * as uuid from 'uuid'
+import { LRUCache } from 'lru-cache'
 
 import {
   RATE_LIMIT_REQUEST_AMOUNT,
   RATE_LIMIT_REQUEST_DURATION,
 } from '../constants'
-const LRU = require('lru-cache')
 
 const rateLimit = (options) => {
-  const tokenCache = new LRU({
+  // lru-cache v10+ uses `ttl` (ms) instead of `maxAge`, and exports a named
+  // `LRUCache` class rather than a default export — `require('lru-cache')`
+  // returns `{ LRUCache }` so `new LRU({})` would throw "not a constructor".
+  const tokenCache = new LRUCache<string, number[]>({
     max: parseInt(options.uniqueTokenPerInterval || 500, 10),
-    maxAge: parseInt(options.interval || 60000, 10),
+    ttl: parseInt(options.interval || 60000, 10),
   })
 
   return {
