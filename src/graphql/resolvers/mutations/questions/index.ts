@@ -1,7 +1,6 @@
-import { UserInputError } from 'apollo-server-micro'
-
 import { baseUrl } from '~/config/seo'
 import { Context } from '~/graphql/context'
+import { UserInputError } from '~/graphql/helpers/errors'
 import {
   MutationAddQuestionArgs,
   MutationDeleteQuestionArgs,

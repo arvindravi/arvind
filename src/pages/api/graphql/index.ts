@@ -1,7 +1,7 @@
-import { ApolloServer } from 'apollo-server-micro'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { ApolloServer } from '@apollo/server'
+import { startServerAndCreateNextHandler } from '@as-integrations/next'
 
-import context from '~/graphql/context'
+import { getContext } from '~/graphql/context'
 import withRateLimit from '~/graphql/helpers/withRateLimit'
 import resolvers from '~/graphql/resolvers'
 import typeDefs from '~/graphql/typeDefs'
@@ -9,23 +9,11 @@ import typeDefs from '~/graphql/typeDefs'
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context,
   introspection: true,
 })
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
-
-// apollo-server v3 requires `server.start()` before `createHandler()`.
-// Memoize the start promise so concurrent cold invocations share one init.
-const startServer = apolloServer.start()
-
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  await startServer
-  return apolloServer.createHandler({ path: '/api/graphql' })(req, res)
-}
+const handler = startServerAndCreateNextHandler(apolloServer, {
+  context: async (req, res) => getContext(req, res),
+})
 
 export default withRateLimit(handler)

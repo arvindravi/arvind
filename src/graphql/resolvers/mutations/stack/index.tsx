@@ -1,8 +1,8 @@
-import { UserInputError } from 'apollo-server-micro'
 import fetch from 'isomorphic-unfetch'
 import slugify from 'slugify'
 
 import { Context } from '~/graphql/context'
+import { UserInputError } from '~/graphql/helpers/errors'
 import {
   MutationAddStackArgs,
   MutationDeleteStackArgs,
