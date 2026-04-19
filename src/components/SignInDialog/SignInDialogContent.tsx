@@ -78,6 +78,7 @@ export function SignInDialogContent() {
       </div>
 
       <div className="flex items-stretch justify-items-stretch self-stretch">
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- Auth0 server-redirect, not a Next page */}
         <a className="flex w-full" href="/api/auth/login">
           <TwitterButton style={{ flex: '1' }} size="large">
             <svg

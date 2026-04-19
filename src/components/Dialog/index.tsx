@@ -61,7 +61,10 @@ export function DialogComponent({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="fixed inset-0 bg-black bg-opacity-50" aria-hidden="true" />
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50"
+                aria-hidden="true"
+              />
             </Transition.Child>
 
             <Transition.Child

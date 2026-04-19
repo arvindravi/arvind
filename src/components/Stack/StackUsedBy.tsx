@@ -81,7 +81,7 @@ export function StackUsedBy(props) {
   }
 
   return (
-    (<div className="flex flex-col rounded-md pt-2">
+    <div className="flex flex-col rounded-md pt-2">
       <div
         className={`flex flex-col space-y-4 rounded-t-md border border-b-0 border-gray-200 bg-gray-100 p-4 dark:border-gray-800 dark:bg-white dark:bg-opacity-10`}
       >
@@ -103,8 +103,11 @@ export function StackUsedBy(props) {
             {data.stack.usedBy.map((user) => (
               <Tooltip key={user.id} content={user.name}>
                 <span>
-                  <Link href={`/u/${user.username}`} passHref className="inline-flex p-1">
-
+                  <Link
+                    href={`/u/${user.username}`}
+                    passHref
+                    className="inline-flex p-1"
+                  >
                     <Avatar
                       user={user}
                       src={user.avatar}
@@ -113,7 +116,6 @@ export function StackUsedBy(props) {
                       className="rounded-full"
                       layout="fixed"
                     />
-
                   </Link>
                 </span>
               </Tooltip>
@@ -130,6 +132,6 @@ export function StackUsedBy(props) {
         />
         <p className="text-primary text-sm font-medium">I use this</p>
       </label>
-    </div>)
-  );
+    </div>
+  )
 }

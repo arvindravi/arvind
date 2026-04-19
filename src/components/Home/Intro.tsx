@@ -76,13 +76,12 @@ const workHistory = [
   },
 ]
 
-
 export function Intro() {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
 
   return (
-    (<Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
+    <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
       <TitleBar
         magicTitle
         titleRef={titleRef}
@@ -163,6 +162,6 @@ export function Intro() {
           </SectionContainer>
         </div>
       </Detail.ContentContainer>
-    </Detail.Container>)
-  );
+    </Detail.Container>
+  )
 }

@@ -9,12 +9,13 @@ export const GRAPHCDN_PURGE_ENDPOINT = process.env.GRAPHCDN_PURGE_ENDPOINT
 export const CLIENT_URL = IS_PROD ? baseUrl : 'http://localhost:3000'
 
 const PREVIEW_URL = process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL
+const DEV_PORT = process.env.PORT || '3000'
 
 export const GRAPHQL_ENDPOINT = IS_DEV
-  ? '/api/graphql'
+  ? `http://localhost:${DEV_PORT}/api/graphql`
   : IS_PREVIEW
-  ? `https://${PREVIEW_URL}/api/graphql`
-  : 'https://arvindravi.com/api/graphql'
+    ? `https://${PREVIEW_URL}/api/graphql`
+    : 'https://arvindravi.com/api/graphql'
 
 export const PAGINATION_AMOUNT = 24
 

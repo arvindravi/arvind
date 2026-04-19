@@ -94,7 +94,9 @@ export async function addComment(
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const parentObject = await (prisma as any)[table].findUnique({ where: { id: refId } })
+  const parentObject = await (prisma as any)[table].findUnique({
+    where: { id: refId },
+  })
 
   if (!parentObject) {
     throw new UserInputError('Commenting on something that doesn’t exist')

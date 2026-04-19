@@ -37,8 +37,8 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
           !existing.publishedAt && published
             ? new Date()
             : existing.publishedAt
-            ? existing.publishedAt
-            : null,
+              ? existing.publishedAt
+              : null,
       },
     })
     .then((post) => {
