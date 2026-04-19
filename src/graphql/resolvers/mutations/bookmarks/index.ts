@@ -1,7 +1,6 @@
-import { UserInputError } from 'apollo-server-micro'
-
 import { IS_PROD } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
+import { UserInputError } from '~/graphql/helpers/errors'
 import {
   MutationAddBookmarkArgs,
   MutationDeleteBookmarkArgs,
