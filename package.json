@@ -1,21 +1,27 @@
 {
   "name": "arvindravi-site",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.0.0 <23"
+  },
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ./src/pages/* ./src/components/* ./src/pages/api/* ./src/graphql/* ./src/lib/* -c .eslintrc.json --fix --ext ts,tsx",
+    "lint": "eslint 'src/**/*.{ts,tsx}' -c .eslintrc.json --fix",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "generate": "graphql-codegen",
     "generate:watch": "graphql-codegen --watch 'src/graphql/**/*.ts'",
-    "postinstall": "yarn generate && prisma generate",
+    "postinstall": "npm run generate && prisma generate",
     "prebuild": "npx graphql-codegen && prisma generate",
+    "prisma:migrate": "dotenv -e .env.local -- prisma migrate dev",
+    "prisma:status": "dotenv -e .env.local -- prisma migrate status",
+    "prisma:studio": "dotenv -e .env.local -- prisma studio",
     "db:dev": "pscale connect arvindravi dev --port 3309",
     "db:prod": "pscale connect arvindravi main --port 3309",
-    "backup": "node backup-script.js",
-    "restore": "node restore-script.js"
+    "backup": "dotenv -e .env.local -- node backup-script.js",
+    "restore": "dotenv -e .env.local -- node restore-script.js"
   },
   "husky": {
     "hooks": {
@@ -30,7 +36,6 @@
     "@prisma/client": "^6.2.1",
     "@prisma/codemods": "^0.7.0",
     "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.16",
     "@tippy.js/react": "^3.1.1",
     "@types/react-dom": "^19.0.2",
@@ -48,6 +53,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "lru-cache": "^11.0.2",
+    "micro": "^10.0.1",
     "next": "14.2.25",
     "next-plausible": "^3.12.4",
     "next-seo": "^6.6.0",
@@ -107,6 +113,7 @@
     "autoprefixer": "^10.4.20",
     "babel-eslint": "^10.1.0",
     "cypress": "^13.17.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "^15.1.4",
     "eslint-config-prettier": "^9.1.0",

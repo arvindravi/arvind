@@ -25,6 +25,8 @@ export function UserFooter() {
 
   function signInButton() {
     return (
+      // `/api/auth/login` is an Auth0 API route that issues a server redirect — not a Next page, so `<Link>` doesn't apply.
+      // eslint-disable-next-line @next/next/no-html-link-for-pages
       <a style={{ width: '100%' }} href="/api/auth/login">
         <GhostButton style={{ width: '100%' }}>Sign in</GhostButton>
       </a>
@@ -47,12 +49,12 @@ export function UserFooter() {
 
   if (data?.viewer) {
     return (
-      (<Container>
+      <Container>
         <Link
           href={`/u/${data.viewer.username}`}
           onClick={() => setIsOpen(false)}
-          className="flex items-center flex-none rounded-full">
-
+          className="flex items-center flex-none rounded-full"
+        >
           <Avatar
             user={data.viewer}
             src={data.viewer.avatar}
@@ -61,7 +63,6 @@ export function UserFooter() {
             layout="fixed"
             className="rounded-full"
           />
-
         </Link>
         <GhostButton
           aria-label="Manage settings"
@@ -71,8 +72,8 @@ export function UserFooter() {
         >
           <Settings size={16} />
         </GhostButton>
-      </Container>)
-    );
+      </Container>
+    )
   }
 
   return <Container>{signInButton()}</Container>

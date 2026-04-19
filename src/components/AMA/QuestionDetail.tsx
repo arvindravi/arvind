@@ -34,83 +34,87 @@ export function QuestionDetail({ id }) {
     timestamp: data?.question.createdAt,
   })
 
-  return (<>
-    <NextSeo
-      title={question.title}
-      description={question.description}
-      openGraph={{
-        title: question.title,
-        description: question.description,
-        images: [
-          {
-            url: routes.ama.seo.image,
-            alt: routes.ama.seo.description,
-          },
-        ],
-      }}
-    />
-    <Detail.Container data-cy="question-detail" ref={scrollContainerRef}>
-      <TitleBar
-        backButton
-        globalMenu={false}
-        backButtonHref={'/ama'}
-        magicTitle
+  return (
+    <>
+      <NextSeo
         title={question.title}
-        titleRef={titleRef}
-        scrollContainerRef={scrollContainerRef}
-        trailingAccessory={<QuestionActions question={question} />}
+        description={question.description}
+        openGraph={{
+          title: question.title,
+          description: question.description,
+          images: [
+            {
+              url: routes.ama.seo.image,
+              alt: routes.ama.seo.description,
+            },
+          ],
+        }}
       />
+      <Detail.Container data-cy="question-detail" ref={scrollContainerRef}>
+        <TitleBar
+          backButton
+          globalMenu={false}
+          backButtonHref={'/ama'}
+          magicTitle
+          title={question.title}
+          titleRef={titleRef}
+          scrollContainerRef={scrollContainerRef}
+          trailingAccessory={<QuestionActions question={question} />}
+        />
 
-      <Detail.ContentContainer>
-        <Detail.Header>
-          <div className="flex items-center space-x-4 pb-2">
-            <Link href={`/u/${question.author.username}`} className="inline-flex">
-
-              <Avatar
-                user={question.author}
-                src={question.author.avatar}
-                width={32}
-                height={32}
-                quality={100}
-                layout="fixed"
-                className="rounded-full"
-              />
-
-            </Link>
-            <div className="flex space-x-1">
-              <Link href={`/u/${question.author.username}`} className="inline-flex space-x-1">
-
-                <span className="text-primary whitespace-nowrap font-semibold leading-snug">
-                  {question.author.name}
-                </span>
-                <span className="text-tertiary inline-flex font-normal leading-snug line-clamp-1">
-                  @{question.author.username}
-                </span>
-
-              </Link>
-              <p className="text-quaternary leading-snug">·</p>
-              <p
-                className="text-quaternary leading-snug line-clamp-1"
-                title={createdAt.raw}
+        <Detail.ContentContainer>
+          <Detail.Header>
+            <div className="flex items-center space-x-4 pb-2">
+              <Link
+                href={`/u/${question.author.username}`}
+                className="inline-flex"
               >
-                {createdAt.formatted}
-              </p>
+                <Avatar
+                  user={question.author}
+                  src={question.author.avatar}
+                  width={32}
+                  height={32}
+                  quality={100}
+                  layout="fixed"
+                  className="rounded-full"
+                />
+              </Link>
+              <div className="flex space-x-1">
+                <Link
+                  href={`/u/${question.author.username}`}
+                  className="inline-flex space-x-1"
+                >
+                  <span className="text-primary whitespace-nowrap font-semibold leading-snug">
+                    {question.author.name}
+                  </span>
+                  <span className="text-tertiary inline-flex font-normal leading-snug line-clamp-1">
+                    @{question.author.username}
+                  </span>
+                </Link>
+                <p className="text-quaternary leading-snug">·</p>
+                <p
+                  className="text-quaternary leading-snug line-clamp-1"
+                  title={createdAt.raw}
+                >
+                  {createdAt.formatted}
+                </p>
+              </div>
             </div>
-          </div>
-          <Detail.Title ref={titleRef}>{question.title}</Detail.Title>
-          {question.description && (
-            <MarkdownRenderer
-              children={question.description}
-              className="comment prose leading-normal"
-              variant="comment"
-            />
-          )}
-        </Detail.Header>
-      </Detail.ContentContainer>
+            <Detail.Title ref={titleRef}>{question.title}</Detail.Title>
+            {question.description && (
+              <MarkdownRenderer
+                children={question.description}
+                className="comment prose leading-normal"
+                variant="comment"
+              />
+            )}
+          </Detail.Header>
+        </Detail.ContentContainer>
 
-      {question.viewerCanComment && (
-        <Comments refId={question.id} type={CommentType.Question} />
-      )}
-    </Detail.Container>
-  </>);
+        {question.viewerCanComment && (
+          <Comments refId={question.id} type={CommentType.Question} />
+        )}
+      </Detail.Container>
+    </>
+  )
 }

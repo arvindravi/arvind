@@ -72,7 +72,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       })
     }
 
-    await prisma.user.update({
+    ;(await prisma.user.update({
       where: {
         id: user.id,
       },
@@ -81,7 +81,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         pendingEmail: null,
       },
     }),
-      done()
+      done())
   } catch (err) {
     error(err.message)
   }

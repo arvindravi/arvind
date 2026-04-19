@@ -1,15 +1,14 @@
-import * as uuid from 'uuid'
+import { LRUCache } from 'lru-cache'
 
 import {
   RATE_LIMIT_REQUEST_AMOUNT,
   RATE_LIMIT_REQUEST_DURATION,
 } from '../constants'
-const LRU = require('lru-cache')
 
 const rateLimit = (options) => {
-  const tokenCache = new LRU({
+  const tokenCache = new LRUCache<string, [number]>({
     max: parseInt(options.uniqueTokenPerInterval || 500, 10),
-    maxAge: parseInt(options.interval || 60000, 10),
+    ttl: parseInt(options.interval || 60000, 10),
   })
 
   return {

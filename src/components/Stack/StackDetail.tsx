@@ -35,86 +35,84 @@ export function StackDetail({ slug }) {
 
   const { stack } = data
 
-  return (<>
-    <NextSeo
-      title={stack.name}
-      description={stack.description}
-      openGraph={{
-        title: stack.name,
-        description: stack.description,
-        images: [
-          {
-            url: routes.stack.seo.image,
-            alt: routes.stack.seo.description,
-          },
-        ],
-      }}
-    />
-    <Detail.Container data-cy="stack-detail" ref={scrollContainerRef}>
-      <TitleBar
-        backButton
-        globalMenu={false}
-        backButtonHref={'/stack'}
-        magicTitle
+  return (
+    <>
+      <NextSeo
         title={stack.name}
-        titleRef={titleRef}
-        scrollContainerRef={scrollContainerRef}
-        trailingAccessory={<StackActions stack={stack} />}
+        description={stack.description}
+        openGraph={{
+          title: stack.name,
+          description: stack.description,
+          images: [
+            {
+              url: routes.stack.seo.image,
+              alt: routes.stack.seo.description,
+            },
+          ],
+        }}
       />
+      <Detail.Container data-cy="stack-detail" ref={scrollContainerRef}>
+        <TitleBar
+          backButton
+          globalMenu={false}
+          backButtonHref={'/stack'}
+          magicTitle
+          title={stack.name}
+          titleRef={titleRef}
+          scrollContainerRef={scrollContainerRef}
+          trailingAccessory={<StackActions stack={stack} />}
+        />
 
-      <Detail.ContentContainer>
-        <Detail.Header>
-          <div className="flex items-center space-x-6">
-            <Link href={stack.url} className="inline-block">
-
-              <Image
-                priority
-                src={stack.image}
-                width={80}
-                height={80}
-                layout="fixed"
-                alt={`${stack.name} icon`}
-                className={'rounded-2xl'}
-              />
-
-            </Link>
-            <div className="flex flex-col space-y-1">
-              <Link href={stack.url} className="block">
-
-                <Detail.Title ref={titleRef}>{stack.name}</Detail.Title>
-
+        <Detail.ContentContainer>
+          <Detail.Header>
+            <div className="flex items-center space-x-6">
+              <Link href={stack.url} className="inline-block">
+                <Image
+                  priority
+                  src={stack.image}
+                  width={80}
+                  height={80}
+                  layout="fixed"
+                  alt={`${stack.name} icon`}
+                  className={'rounded-2xl'}
+                />
               </Link>
-              {stack.tags && stack.tags.length > 0 && (
-                <Tags tags={stack.tags} />
-              )}
+              <div className="flex flex-col space-y-1">
+                <Link href={stack.url} className="block">
+                  <Detail.Title ref={titleRef}>{stack.name}</Detail.Title>
+                </Link>
+                {stack.tags && stack.tags.length > 0 && (
+                  <Tags tags={stack.tags} />
+                )}
+              </div>
             </div>
-          </div>
 
-          <MarkdownRenderer
-            className="text-primary prose"
-            children={stack.description}
-            variant="comment"
-          />
+            <MarkdownRenderer
+              className="text-primary prose"
+              children={stack.description}
+              variant="comment"
+            />
 
-          <PrimaryButton
-            size="large"
-            href={stack.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <LinkIcon size={14} />
-            <span>Visit</span>
-          </PrimaryButton>
+            <PrimaryButton
+              size="large"
+              href={stack.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <LinkIcon size={14} />
+              <span>Visit</span>
+            </PrimaryButton>
 
-          <SignInDialog>
-            {({ openModal }) => (
-              <StackUsedBy triggerSignIn={openModal} stack={stack} />
-            )}
-          </SignInDialog>
-        </Detail.Header>
-      </Detail.ContentContainer>
+            <SignInDialog>
+              {({ openModal }) => (
+                <StackUsedBy triggerSignIn={openModal} stack={stack} />
+              )}
+            </SignInDialog>
+          </Detail.Header>
+        </Detail.ContentContainer>
 
-      <Comments refId={stack.id} type={CommentType.Stack} />
-    </Detail.Container>
-  </>);
+        <Comments refId={stack.id} type={CommentType.Stack} />
+      </Detail.Container>
+    </>
+  )
 }
