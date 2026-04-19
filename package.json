@@ -29,7 +29,7 @@
     }
   },
   "dependencies": {
-    "@apollo/client": "^3.5.8",
+    "@apollo/client": "^4.1.7",
     "@apollo/server": "^5.5.0",
     "@as-integrations/next": "^4.1.0",
     "@auth0/nextjs-auth0": "^3.5.0",

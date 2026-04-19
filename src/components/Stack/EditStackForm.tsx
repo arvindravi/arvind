@@ -206,7 +206,7 @@ export function EditStackForm({ closeModal, stack }) {
           <DeleteButton
             onClick={() => {
               closeModal()
-              handleDelete()
+              handleDelete({})
             }}
           >
             Delete

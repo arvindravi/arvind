@@ -1,4 +1,4 @@
-import { ApolloProvider } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client/react'
 import { NextPageContext } from 'next'
 import PlausibleProvider from 'next-plausible'
 import * as React from 'react'
