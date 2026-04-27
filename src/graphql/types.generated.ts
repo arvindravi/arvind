@@ -42,6 +42,20 @@ export type AddBookmarkInput = {
   url: Scalars['String']['input']
 }
 
+export type AddPhotographInput = {
+  camera?: InputMaybe<Scalars['String']['input']>
+  caption?: InputMaybe<Scalars['String']['input']>
+  capturedAt?: InputMaybe<Scalars['Date']['input']>
+  height: Scalars['Int']['input']
+  imageUrl: Scalars['String']['input']
+  lens?: InputMaybe<Scalars['String']['input']>
+  location?: InputMaybe<Scalars['String']['input']>
+  slug: Scalars['String']['input']
+  tag?: InputMaybe<Scalars['String']['input']>
+  title: Scalars['String']['input']
+  width: Scalars['Int']['input']
+}
+
 export type AddPostInput = {
   excerpt?: InputMaybe<Scalars['String']['input']>
   slug: Scalars['String']['input']
@@ -120,6 +134,18 @@ export type EditBookmarkInput = {
   title: Scalars['String']['input']
 }
 
+export type EditPhotographInput = {
+  camera?: InputMaybe<Scalars['String']['input']>
+  caption?: InputMaybe<Scalars['String']['input']>
+  capturedAt?: InputMaybe<Scalars['Date']['input']>
+  lens?: InputMaybe<Scalars['String']['input']>
+  location?: InputMaybe<Scalars['String']['input']>
+  published?: InputMaybe<Scalars['Boolean']['input']>
+  slug: Scalars['String']['input']
+  tag?: InputMaybe<Scalars['String']['input']>
+  title: Scalars['String']['input']
+}
+
 export type EditPostInput = {
   excerpt?: InputMaybe<Scalars['String']['input']>
   published?: InputMaybe<Scalars['Boolean']['input']>
@@ -193,11 +219,13 @@ export type Mutation = {
   __typename?: 'Mutation'
   addBookmark?: Maybe<Bookmark>
   addComment?: Maybe<Comment>
+  addPhotograph?: Maybe<Photograph>
   addPost?: Maybe<Post>
   addQuestion?: Maybe<Question>
   addStack?: Maybe<Stack>
   deleteBookmark?: Maybe<Scalars['Boolean']['output']>
   deleteComment?: Maybe<Scalars['Boolean']['output']>
+  deletePhotograph?: Maybe<Scalars['Boolean']['output']>
   deletePost?: Maybe<Scalars['Boolean']['output']>
   deleteQuestion?: Maybe<Scalars['Boolean']['output']>
   deleteStack?: Maybe<Scalars['Boolean']['output']>
@@ -205,6 +233,7 @@ export type Mutation = {
   editBookmark?: Maybe<Bookmark>
   editComment?: Maybe<Comment>
   editEmailSubscription?: Maybe<User>
+  editPhotograph?: Maybe<Photograph>
   editPost?: Maybe<Post>
   editQuestion?: Maybe<Question>
   editStack?: Maybe<Stack>
@@ -221,6 +250,10 @@ export type MutationAddCommentArgs = {
   refId: Scalars['ID']['input']
   text: Scalars['String']['input']
   type: CommentType
+}
+
+export type MutationAddPhotographArgs = {
+  data: AddPhotographInput
 }
 
 export type MutationAddPostArgs = {
@@ -240,6 +273,10 @@ export type MutationDeleteBookmarkArgs = {
 }
 
 export type MutationDeleteCommentArgs = {
+  id: Scalars['ID']['input']
+}
+
+export type MutationDeletePhotographArgs = {
   id: Scalars['ID']['input']
 }
 
@@ -267,6 +304,11 @@ export type MutationEditCommentArgs = {
 
 export type MutationEditEmailSubscriptionArgs = {
   data?: InputMaybe<EmailSubscriptionInput>
+}
+
+export type MutationEditPhotographArgs = {
+  data: EditPhotographInput
+  id: Scalars['ID']['input']
 }
 
 export type MutationEditPostArgs = {
@@ -304,6 +346,42 @@ export type PageInfo = {
   totalCount?: Maybe<Scalars['Int']['output']>
 }
 
+export type Photograph = {
+  __typename?: 'Photograph'
+  camera?: Maybe<Scalars['String']['output']>
+  caption?: Maybe<Scalars['String']['output']>
+  capturedAt?: Maybe<Scalars['Date']['output']>
+  createdAt: Scalars['Date']['output']
+  height: Scalars['Int']['output']
+  id: Scalars['ID']['output']
+  imageUrl: Scalars['String']['output']
+  lens?: Maybe<Scalars['String']['output']>
+  location?: Maybe<Scalars['String']['output']>
+  publishedAt?: Maybe<Scalars['Date']['output']>
+  slug: Scalars['String']['output']
+  tags: Array<Maybe<Tag>>
+  title: Scalars['String']['output']
+  updatedAt?: Maybe<Scalars['Date']['output']>
+  width: Scalars['Int']['output']
+}
+
+export type PhotographEdge = {
+  __typename?: 'PhotographEdge'
+  cursor?: Maybe<Scalars['String']['output']>
+  node?: Maybe<Photograph>
+}
+
+export type PhotographFilter = {
+  published?: InputMaybe<Scalars['Boolean']['input']>
+  tag?: InputMaybe<Scalars['String']['input']>
+}
+
+export type PhotographsConnection = {
+  __typename?: 'PhotographsConnection'
+  edges: Array<Maybe<PhotographEdge>>
+  pageInfo?: Maybe<PageInfo>
+}
+
 export type Post = {
   __typename?: 'Post'
   author?: Maybe<User>
@@ -328,6 +406,8 @@ export type Query = {
   comments: Array<Maybe<Comment>>
   hackerNewsPost?: Maybe<HackerNewsPost>
   hackerNewsPosts: Array<Maybe<HackerNewsPost>>
+  photograph?: Maybe<Photograph>
+  photographs: PhotographsConnection
   post?: Maybe<Post>
   posts: Array<Maybe<Post>>
   question?: Maybe<Question>
@@ -360,6 +440,16 @@ export type QueryCommentsArgs = {
 
 export type QueryHackerNewsPostArgs = {
   id: Scalars['ID']['input']
+}
+
+export type QueryPhotographArgs = {
+  slug: Scalars['String']['input']
+}
+
+export type QueryPhotographsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>
+  filter?: InputMaybe<PhotographFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
 }
 
 export type QueryPostArgs = {
@@ -638,6 +728,67 @@ export type HackerNewsPostInfoFragment = {
       } | null> | null
     } | null> | null
   } | null> | null
+}
+
+export type PhotographCoreFragment = {
+  __typename: 'Photograph'
+  id: string
+  slug: string
+  title: string
+  imageUrl: string
+  width: number
+  height: number
+}
+
+export type PhotographListItemFragment = {
+  __typename: 'Photograph'
+  id: string
+  slug: string
+  title: string
+  imageUrl: string
+  width: number
+  height: number
+}
+
+export type PhotographDetailFragment = {
+  __typename: 'Photograph'
+  createdAt: any
+  publishedAt?: any | null
+  caption?: string | null
+  capturedAt?: any | null
+  location?: string | null
+  camera?: string | null
+  lens?: string | null
+  id: string
+  slug: string
+  title: string
+  imageUrl: string
+  width: number
+  height: number
+  tags: Array<{ __typename?: 'Tag'; name: string } | null>
+}
+
+export type PhotographsConnectionFragment = {
+  __typename?: 'PhotographsConnection'
+  pageInfo?: {
+    __typename?: 'PageInfo'
+    hasNextPage?: boolean | null
+    totalCount?: number | null
+    endCursor?: string | null
+  } | null
+  edges: Array<{
+    __typename?: 'PhotographEdge'
+    cursor?: string | null
+    node?: {
+      __typename: 'Photograph'
+      id: string
+      slug: string
+      title: string
+      imageUrl: string
+      width: number
+      height: number
+    } | null
+  } | null>
 }
 
 export type PostCoreFragment = {
@@ -975,6 +1126,66 @@ export type EditEmailSubscriptionMutation = {
       type?: EmailSubscriptionType | null
     } | null> | null
   } | null
+}
+
+export type AddPhotographMutationVariables = Exact<{
+  data: AddPhotographInput
+}>
+
+export type AddPhotographMutation = {
+  __typename?: 'Mutation'
+  addPhotograph?: {
+    __typename: 'Photograph'
+    createdAt: any
+    publishedAt?: any | null
+    caption?: string | null
+    capturedAt?: any | null
+    location?: string | null
+    camera?: string | null
+    lens?: string | null
+    id: string
+    slug: string
+    title: string
+    imageUrl: string
+    width: number
+    height: number
+    tags: Array<{ __typename?: 'Tag'; name: string } | null>
+  } | null
+}
+
+export type EditPhotographMutationVariables = Exact<{
+  id: Scalars['ID']['input']
+  data: EditPhotographInput
+}>
+
+export type EditPhotographMutation = {
+  __typename?: 'Mutation'
+  editPhotograph?: {
+    __typename: 'Photograph'
+    createdAt: any
+    publishedAt?: any | null
+    caption?: string | null
+    capturedAt?: any | null
+    location?: string | null
+    camera?: string | null
+    lens?: string | null
+    id: string
+    slug: string
+    title: string
+    imageUrl: string
+    width: number
+    height: number
+    tags: Array<{ __typename?: 'Tag'; name: string } | null>
+  } | null
+}
+
+export type DeletePhotographMutationVariables = Exact<{
+  id: Scalars['ID']['input']
+}>
+
+export type DeletePhotographMutation = {
+  __typename?: 'Mutation'
+  deletePhotograph?: boolean | null
 }
 
 export type EditPostMutationVariables = Exact<{
@@ -1407,6 +1618,63 @@ export type GetHackerNewsPostQuery = {
   } | null
 }
 
+export type GetPhotographsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>
+  after?: InputMaybe<Scalars['String']['input']>
+  filter?: InputMaybe<PhotographFilter>
+}>
+
+export type GetPhotographsQuery = {
+  __typename?: 'Query'
+  photographs: {
+    __typename?: 'PhotographsConnection'
+    pageInfo?: {
+      __typename?: 'PageInfo'
+      hasNextPage?: boolean | null
+      totalCount?: number | null
+      endCursor?: string | null
+    } | null
+    edges: Array<{
+      __typename?: 'PhotographEdge'
+      cursor?: string | null
+      node?: {
+        __typename: 'Photograph'
+        id: string
+        slug: string
+        title: string
+        imageUrl: string
+        width: number
+        height: number
+      } | null
+    } | null>
+  }
+}
+
+export type GetPhotographQueryVariables = Exact<{
+  slug: Scalars['String']['input']
+}>
+
+export type GetPhotographQuery = {
+  __typename?: 'Query'
+  photograph?: {
+    __typename: 'Photograph'
+    createdAt: any
+    publishedAt?: any | null
+    caption?: string | null
+    capturedAt?: any | null
+    location?: string | null
+    camera?: string | null
+    lens?: string | null
+    id: string
+    slug: string
+    title: string
+    imageUrl: string
+    width: number
+    height: number
+    tags: Array<{ __typename?: 'Tag'; name: string } | null>
+  } | null
+}
+
 export type GetPostsQueryVariables = Exact<{
   filter?: InputMaybe<WritingFilter>
 }>
@@ -1754,6 +2022,55 @@ export const HackerNewsPostInfoFragmentDoc = gql`
   }
   ${HackerNewsListItemInfoFragmentDoc}
   ${HackerNewsCommentInfoFragmentDoc}
+`
+export const PhotographCoreFragmentDoc = gql`
+  fragment PhotographCore on Photograph {
+    __typename
+    id
+    slug
+    title
+    imageUrl
+    width
+    height
+  }
+`
+export const PhotographDetailFragmentDoc = gql`
+  fragment PhotographDetail on Photograph {
+    ...PhotographCore
+    createdAt
+    publishedAt
+    caption
+    capturedAt
+    location
+    camera
+    lens
+    tags {
+      name
+    }
+  }
+  ${PhotographCoreFragmentDoc}
+`
+export const PhotographListItemFragmentDoc = gql`
+  fragment PhotographListItem on Photograph {
+    ...PhotographCore
+  }
+  ${PhotographCoreFragmentDoc}
+`
+export const PhotographsConnectionFragmentDoc = gql`
+  fragment PhotographsConnection on PhotographsConnection {
+    pageInfo {
+      hasNextPage
+      totalCount
+      endCursor
+    }
+    edges {
+      cursor
+      node {
+        ...PhotographListItem
+      }
+    }
+  }
+  ${PhotographListItemFragmentDoc}
 `
 export const PostCoreFragmentDoc = gql`
   fragment PostCore on Post {
@@ -2247,6 +2564,160 @@ export type EditEmailSubscriptionMutationOptions =
   ApolloReactCommon.BaseMutationOptions<
     EditEmailSubscriptionMutation,
     EditEmailSubscriptionMutationVariables
+  >
+export const AddPhotographDocument = gql`
+  mutation addPhotograph($data: AddPhotographInput!) {
+    addPhotograph(data: $data) {
+      ...PhotographDetail
+    }
+  }
+  ${PhotographDetailFragmentDoc}
+`
+export type AddPhotographMutationFn = ApolloReactCommon.MutationFunction<
+  AddPhotographMutation,
+  AddPhotographMutationVariables
+>
+
+/**
+ * __useAddPhotographMutation__
+ *
+ * To run a mutation, you first call `useAddPhotographMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPhotographMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPhotographMutation, { data, loading, error }] = useAddPhotographMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAddPhotographMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    AddPhotographMutation,
+    AddPhotographMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useMutation<
+    AddPhotographMutation,
+    AddPhotographMutationVariables
+  >(AddPhotographDocument, options)
+}
+export type AddPhotographMutationHookResult = ReturnType<
+  typeof useAddPhotographMutation
+>
+export type AddPhotographMutationResult =
+  ApolloReactCommon.MutationResult<AddPhotographMutation>
+export type AddPhotographMutationOptions =
+  ApolloReactCommon.BaseMutationOptions<
+    AddPhotographMutation,
+    AddPhotographMutationVariables
+  >
+export const EditPhotographDocument = gql`
+  mutation editPhotograph($id: ID!, $data: EditPhotographInput!) {
+    editPhotograph(id: $id, data: $data) {
+      ...PhotographDetail
+    }
+  }
+  ${PhotographDetailFragmentDoc}
+`
+export type EditPhotographMutationFn = ApolloReactCommon.MutationFunction<
+  EditPhotographMutation,
+  EditPhotographMutationVariables
+>
+
+/**
+ * __useEditPhotographMutation__
+ *
+ * To run a mutation, you first call `useEditPhotographMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditPhotographMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editPhotographMutation, { data, loading, error }] = useEditPhotographMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditPhotographMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    EditPhotographMutation,
+    EditPhotographMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useMutation<
+    EditPhotographMutation,
+    EditPhotographMutationVariables
+  >(EditPhotographDocument, options)
+}
+export type EditPhotographMutationHookResult = ReturnType<
+  typeof useEditPhotographMutation
+>
+export type EditPhotographMutationResult =
+  ApolloReactCommon.MutationResult<EditPhotographMutation>
+export type EditPhotographMutationOptions =
+  ApolloReactCommon.BaseMutationOptions<
+    EditPhotographMutation,
+    EditPhotographMutationVariables
+  >
+export const DeletePhotographDocument = gql`
+  mutation deletePhotograph($id: ID!) {
+    deletePhotograph(id: $id)
+  }
+`
+export type DeletePhotographMutationFn = ApolloReactCommon.MutationFunction<
+  DeletePhotographMutation,
+  DeletePhotographMutationVariables
+>
+
+/**
+ * __useDeletePhotographMutation__
+ *
+ * To run a mutation, you first call `useDeletePhotographMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePhotographMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePhotographMutation, { data, loading, error }] = useDeletePhotographMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeletePhotographMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    DeletePhotographMutation,
+    DeletePhotographMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useMutation<
+    DeletePhotographMutation,
+    DeletePhotographMutationVariables
+  >(DeletePhotographDocument, options)
+}
+export type DeletePhotographMutationHookResult = ReturnType<
+  typeof useDeletePhotographMutation
+>
+export type DeletePhotographMutationResult =
+  ApolloReactCommon.MutationResult<DeletePhotographMutation>
+export type DeletePhotographMutationOptions =
+  ApolloReactCommon.BaseMutationOptions<
+    DeletePhotographMutation,
+    DeletePhotographMutationVariables
   >
 export const EditPostDocument = gql`
   mutation editPost($id: ID!, $data: EditPostInput!) {
@@ -3429,6 +3900,212 @@ export type GetHackerNewsPostSuspenseQueryHookResult = ReturnType<
 export type GetHackerNewsPostQueryResult = ApolloReactCommon.QueryResult<
   GetHackerNewsPostQuery,
   GetHackerNewsPostQueryVariables
+>
+export const GetPhotographsDocument = gql`
+  query getPhotographs($first: Int, $after: String, $filter: PhotographFilter) {
+    photographs(first: $first, after: $after, filter: $filter) {
+      ...PhotographsConnection
+    }
+  }
+  ${PhotographsConnectionFragmentDoc}
+`
+
+/**
+ * __useGetPhotographsQuery__
+ *
+ * To run a query within a React component, call `useGetPhotographsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPhotographsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPhotographsQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *      after: // value for 'after'
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useGetPhotographsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetPhotographsQuery,
+    GetPhotographsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useQuery<
+    GetPhotographsQuery,
+    GetPhotographsQueryVariables
+  >(GetPhotographsDocument, options)
+}
+export function useGetPhotographsLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    GetPhotographsQuery,
+    GetPhotographsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useLazyQuery<
+    GetPhotographsQuery,
+    GetPhotographsQueryVariables
+  >(GetPhotographsDocument, options)
+}
+// @ts-ignore
+export function useGetPhotographsSuspenseQuery(
+  baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<
+    GetPhotographsQuery,
+    GetPhotographsQueryVariables
+  >
+): ApolloReactHooks.UseSuspenseQueryResult<
+  GetPhotographsQuery,
+  GetPhotographsQueryVariables
+>
+export function useGetPhotographsSuspenseQuery(
+  baseOptions?:
+    | ApolloReactHooks.SkipToken
+    | ApolloReactHooks.SuspenseQueryHookOptions<
+        GetPhotographsQuery,
+        GetPhotographsQueryVariables
+      >
+): ApolloReactHooks.UseSuspenseQueryResult<
+  GetPhotographsQuery | undefined,
+  GetPhotographsQueryVariables
+>
+export function useGetPhotographsSuspenseQuery(
+  baseOptions?:
+    | ApolloReactHooks.SkipToken
+    | ApolloReactHooks.SuspenseQueryHookOptions<
+        GetPhotographsQuery,
+        GetPhotographsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === ApolloReactHooks.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useSuspenseQuery<
+    GetPhotographsQuery,
+    GetPhotographsQueryVariables
+  >(GetPhotographsDocument, options)
+}
+export type GetPhotographsQueryHookResult = ReturnType<
+  typeof useGetPhotographsQuery
+>
+export type GetPhotographsLazyQueryHookResult = ReturnType<
+  typeof useGetPhotographsLazyQuery
+>
+export type GetPhotographsSuspenseQueryHookResult = ReturnType<
+  typeof useGetPhotographsSuspenseQuery
+>
+export type GetPhotographsQueryResult = ApolloReactCommon.QueryResult<
+  GetPhotographsQuery,
+  GetPhotographsQueryVariables
+>
+export const GetPhotographDocument = gql`
+  query getPhotograph($slug: String!) {
+    photograph(slug: $slug) {
+      ...PhotographDetail
+    }
+  }
+  ${PhotographDetailFragmentDoc}
+`
+
+/**
+ * __useGetPhotographQuery__
+ *
+ * To run a query within a React component, call `useGetPhotographQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPhotographQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPhotographQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetPhotographQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    GetPhotographQuery,
+    GetPhotographQueryVariables
+  > &
+    (
+      | { variables: GetPhotographQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useQuery<
+    GetPhotographQuery,
+    GetPhotographQueryVariables
+  >(GetPhotographDocument, options)
+}
+export function useGetPhotographLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    GetPhotographQuery,
+    GetPhotographQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useLazyQuery<
+    GetPhotographQuery,
+    GetPhotographQueryVariables
+  >(GetPhotographDocument, options)
+}
+// @ts-ignore
+export function useGetPhotographSuspenseQuery(
+  baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<
+    GetPhotographQuery,
+    GetPhotographQueryVariables
+  >
+): ApolloReactHooks.UseSuspenseQueryResult<
+  GetPhotographQuery,
+  GetPhotographQueryVariables
+>
+export function useGetPhotographSuspenseQuery(
+  baseOptions?:
+    | ApolloReactHooks.SkipToken
+    | ApolloReactHooks.SuspenseQueryHookOptions<
+        GetPhotographQuery,
+        GetPhotographQueryVariables
+      >
+): ApolloReactHooks.UseSuspenseQueryResult<
+  GetPhotographQuery | undefined,
+  GetPhotographQueryVariables
+>
+export function useGetPhotographSuspenseQuery(
+  baseOptions?:
+    | ApolloReactHooks.SkipToken
+    | ApolloReactHooks.SuspenseQueryHookOptions<
+        GetPhotographQuery,
+        GetPhotographQueryVariables
+      >
+) {
+  const options =
+    baseOptions === ApolloReactHooks.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useSuspenseQuery<
+    GetPhotographQuery,
+    GetPhotographQueryVariables
+  >(GetPhotographDocument, options)
+}
+export type GetPhotographQueryHookResult = ReturnType<
+  typeof useGetPhotographQuery
+>
+export type GetPhotographLazyQueryHookResult = ReturnType<
+  typeof useGetPhotographLazyQuery
+>
+export type GetPhotographSuspenseQueryHookResult = ReturnType<
+  typeof useGetPhotographSuspenseQuery
+>
+export type GetPhotographQueryResult = ApolloReactCommon.QueryResult<
+  GetPhotographQuery,
+  GetPhotographQueryVariables
 >
 export const GetPostsDocument = gql`
   query getPosts($filter: WritingFilter) {

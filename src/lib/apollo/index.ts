@@ -59,6 +59,7 @@ export function createApolloClient({ initialState = {}, context = {} }) {
           bookmarks: relayStylePagination(['filter']),
           questions: relayStylePagination(['filter']),
           stacks: relayStylePagination(),
+          photographs: relayStylePagination(['filter']),
         },
       },
       Comments: {

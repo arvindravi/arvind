@@ -13,6 +13,7 @@ import {
   GitHubIcon,
   HackerNewsIcon,
   HomeIcon,
+  PhotographsIcon,
   PodcastIcon,
   SecurityChecklistIcon,
   StackIcon,
@@ -20,6 +21,7 @@ import {
   TwitterIcon,
   WritingIcon,
 } from '~/components/Icon'
+import { AddPhotographDialog } from '~/components/Photographs/AddPhotographDialog'
 import { useViewerQuery } from '~/graphql/types.generated'
 
 import { NavigationLink } from './NavigationLink'
@@ -29,6 +31,18 @@ function ThisAddBookmarkDialog() {
     <AddBookmarkDialog
       trigger={
         <GhostButton aria-label="Add bookmark" size="small-square">
+          <Plus size={16} />
+        </GhostButton>
+      }
+    />
+  )
+}
+
+function ThisAddPhotographDialog() {
+  return (
+    <AddPhotographDialog
+      trigger={
+        <GhostButton aria-label="Add photograph" size="small-square">
           <Plus size={16} />
         </GhostButton>
       }
@@ -69,6 +83,16 @@ export function SidebarNavigation() {
       trailingAccessory: null,
       isActive: router.asPath.indexOf('/bookmarks') >= 0,
       trailingAction: data?.viewer?.isAdmin ? ThisAddBookmarkDialog : null,
+      isExternal: false,
+    },
+
+    {
+      href: '/photographs',
+      label: 'Photographs',
+      icon: PhotographsIcon,
+      trailingAccessory: null,
+      isActive: router.asPath.indexOf('/photographs') >= 0,
+      trailingAction: data?.viewer?.isAdmin ? ThisAddPhotographDialog : null,
       isExternal: false,
     },
 

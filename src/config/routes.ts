@@ -84,6 +84,17 @@ const routes = {
       url: 'stack',
     }),
   },
+  // TODO: create OG image at /public/static/og/photographs.png
+  photographs: {
+    label: 'Photographs',
+    path: '/photographs',
+    seo: extendSEO({
+      title: 'Photographs',
+      description: 'A small collection of photographs.',
+      image: 'og/photographs.png',
+      url: 'photographs',
+    }),
+  },
   settings: {
     label: 'Settings',
     path: '/settings',

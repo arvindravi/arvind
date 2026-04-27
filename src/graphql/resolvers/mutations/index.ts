@@ -12,6 +12,11 @@ import {
 } from '~/graphql/resolvers/mutations/comment'
 import { editEmailSubscription } from '~/graphql/resolvers/mutations/emailSubscription'
 import {
+  addPhotograph,
+  deletePhotograph,
+  editPhotograph,
+} from '~/graphql/resolvers/mutations/photograph'
+import {
   addPost,
   deletePost,
   editPost,
@@ -38,6 +43,9 @@ export default {
   editStack: requiresAdmin(editStack),
   deleteStack: requiresAdmin(deleteStack),
   toggleStackUser: requiresUser(toggleStackUser),
+  addPhotograph: requiresAdmin(addPhotograph),
+  editPhotograph: requiresAdmin(editPhotograph),
+  deletePhotograph: requiresAdmin(deletePhotograph),
   addQuestion: requiresUser(addQuestion),
   editQuestion: requiresUser(editQuestion),
   deleteQuestion: requiresUser(deleteQuestion),
