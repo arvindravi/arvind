@@ -81,6 +81,24 @@ export default gql`
     viewerHasReacted: Boolean
   }
 
+  type Photograph {
+    id: ID!
+    createdAt: Date!
+    updatedAt: Date
+    publishedAt: Date
+    slug: String!
+    title: String!
+    caption: String
+    imageUrl: String!
+    width: Int!
+    height: Int!
+    capturedAt: Date
+    location: String
+    camera: String
+    lens: String
+    tags: [Tag]!
+  }
+
   enum UserRole {
     BLOCKED
     USER
@@ -159,6 +177,11 @@ export default gql`
     published: Boolean
   }
 
+  input PhotographFilter {
+    tag: String
+    published: Boolean
+  }
+
   input QuestionFilter {
     status: QuestionStatus
   }
@@ -175,6 +198,11 @@ export default gql`
 
   type StackEdge {
     node: Stack
+    cursor: String
+  }
+
+  type PhotographEdge {
+    node: Photograph
     cursor: String
   }
 
@@ -199,6 +227,11 @@ export default gql`
     edges: [StackEdge]!
   }
 
+  type PhotographsConnection {
+    pageInfo: PageInfo
+    edges: [PhotographEdge]!
+  }
+
   type Query {
     viewer: User
     user(username: String!): User
@@ -210,6 +243,12 @@ export default gql`
     ): BookmarksConnection!
     stack(slug: String!): Stack
     stacks(first: Int, after: String): StacksConnection!
+    photograph(slug: String!): Photograph
+    photographs(
+      first: Int
+      after: String
+      filter: PhotographFilter
+    ): PhotographsConnection!
     comment(id: ID!): Comment
     comments(refId: ID!, type: CommentType!): [Comment]!
     posts(filter: WritingFilter): [Post]!
@@ -250,6 +289,32 @@ export default gql`
     image: String!
     description: String!
     tag: String
+  }
+
+  input AddPhotographInput {
+    title: String!
+    slug: String!
+    caption: String
+    imageUrl: String!
+    width: Int!
+    height: Int!
+    capturedAt: Date
+    location: String
+    camera: String
+    lens: String
+    tag: String
+  }
+
+  input EditPhotographInput {
+    title: String!
+    slug: String!
+    caption: String
+    capturedAt: Date
+    location: String
+    camera: String
+    lens: String
+    tag: String
+    published: Boolean
   }
 
   input AddBookmarkInput {
@@ -299,6 +364,9 @@ export default gql`
     editStack(id: ID!, data: EditStackInput!): Stack
     deleteStack(id: ID!): Boolean
     toggleStackUser(id: ID!): Stack
+    addPhotograph(data: AddPhotographInput!): Photograph
+    editPhotograph(id: ID!, data: EditPhotographInput!): Photograph
+    deletePhotograph(id: ID!): Boolean
     addQuestion(data: AddQuestionInput!): Question
     editQuestion(id: ID!, data: EditQuestionInput!): Question
     deleteQuestion(id: ID!): Boolean
