@@ -1,11 +1,12 @@
 import {
   ApolloClient,
   ApolloLink,
+  CombinedGraphQLErrors,
   HttpLink,
   InMemoryCache,
   ServerError,
 } from '@apollo/client'
-import { onError } from '@apollo/client/link/error'
+import { ErrorLink } from '@apollo/client/link/error'
 import { relayStylePagination } from '@apollo/client/utilities'
 import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
@@ -25,24 +26,26 @@ function createLink() {
   })
 }
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    graphQLErrors.forEach(({ message }) => {
+const errorLink = new ErrorLink(({ error }) => {
+  if (CombinedGraphQLErrors.is(error)) {
+    error.errors.forEach(({ message }) => {
       try {
         toast.error(message)
       } catch {
         console.error({ message })
       }
     })
+    return
   }
 
-  if (networkError) {
-    const err = networkError as ServerError
-    try {
-      toast.error((err.result as Record<string, unknown>).error as string)
-    } catch {
-      console.error({ err })
-    }
+  const networkError = error as ServerError
+  try {
+    const result = networkError.bodyText
+      ? JSON.parse(networkError.bodyText)
+      : null
+    toast.error(result?.error || networkError.message)
+  } catch {
+    console.error({ networkError })
   }
 })
 
@@ -56,6 +59,7 @@ export function createApolloClient({ initialState = {}, context = {} }) {
           bookmarks: relayStylePagination(['filter']),
           questions: relayStylePagination(['filter']),
           stacks: relayStylePagination(),
+          photographs: relayStylePagination(['filter']),
         },
       },
       Comments: {

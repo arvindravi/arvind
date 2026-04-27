@@ -22,3 +22,6 @@ generates:
       withComponent: false
       reactApolloVersion: 3
       preResolveTypes: true
+      apolloReactCommonImportFrom: '~/lib/apollo/codegen-shim'
+      apolloReactHooksImportFrom: '~/lib/apollo/codegen-shim'
+      apolloImportFrom: '@apollo/client'

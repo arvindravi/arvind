@@ -79,7 +79,7 @@ export const Comment = React.memo(function MemoComment({
   })
 
   function handleDelete() {
-    deleteComment()
+    deleteComment({})
   }
 
   function handleEdit() {
@@ -99,7 +99,7 @@ export const Comment = React.memo(function MemoComment({
 
   function handleSaveEdit() {
     setIsSavingEdit(true)
-    editComment()
+    editComment({})
   }
 
   const createdAt = timestampToCleanTime({

@@ -120,7 +120,7 @@ export function EditQuestionForm({ closeModal, question }) {
       return dispatch({ type: 'error', value: 'Gotta have a question' })
     }
 
-    editQuestion()
+    editQuestion({})
     return closeModal()
   }
 
@@ -161,7 +161,7 @@ export function EditQuestionForm({ closeModal, question }) {
         <DeleteButton
           onClick={() => {
             closeModal()
-            handleDelete()
+            handleDelete({})
           }}
         >
           Delete

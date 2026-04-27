@@ -126,10 +126,31 @@ model PostEdit {
 }
 
 model Tag {
-  id        String     @id @default(cuid())
-  name      String     @unique
-  bookmarks Bookmark[] @relation("BookmarkToTag")
-  stacks    Stack[]    @relation("StackToTag")
+  id          String       @id @default(cuid())
+  name        String       @unique
+  bookmarks   Bookmark[]   @relation("BookmarkToTag")
+  stacks      Stack[]      @relation("StackToTag")
+  photographs Photograph[] @relation("PhotographToTag")
+}
+
+model Photograph {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  slug        String    @unique @db.VarChar(96)
+  title       String    @db.VarChar(140)
+  caption     String?   @db.VarChar(1024)
+  imageUrl    String    @db.VarChar(512)
+  width       Int
+  height      Int
+  capturedAt  DateTime?
+  location    String?   @db.VarChar(120)
+  camera      String?   @db.VarChar(80)
+  lens        String?   @db.VarChar(80)
+  tags        Tag[]     @relation("PhotographToTag")
+
+  @@index([publishedAt])
 }
 
 model Stack {

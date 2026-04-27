@@ -137,6 +137,24 @@ export function BookmarksIcon() {
   )
 }
 
+export function PhotographsIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      width="16"
+      height="16"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M4 5h2l1.447-1.447A1 1 0 018.118 3h3.764a1 1 0 01.671.553L13.999 5H16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2zm6 9a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
 export function AMAIcon() {
   return (
     <svg

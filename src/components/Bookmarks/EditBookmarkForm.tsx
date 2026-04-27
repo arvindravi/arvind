@@ -135,7 +135,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
       return dispatch({ type: 'error', value: 'Bookmark must have a title' })
     }
 
-    editBookmark()
+    editBookmark({})
     return closeModal()
   }
 
@@ -211,7 +211,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
         <DeleteButton
           onClick={() => {
             closeModal()
-            handleDelete()
+            handleDelete({})
           }}
         >
           Delete
