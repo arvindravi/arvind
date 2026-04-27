@@ -4,7 +4,6 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { withProviders } from '~/components/Providers/withProviders'
 import { StackDetail } from '~/components/Stack/StackDetail'
 import { StackList } from '~/components/Stack/StackList'
-import { getContext } from '~/graphql/context'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_STACK, GET_STACKS } from '~/graphql/queries/stack'
 import { GET_VIEWER } from '~/graphql/queries/viewer'
@@ -16,8 +15,9 @@ function StackDetailPage({ slug }) {
 }
 
 export async function getServerSideProps({ params: { slug }, req, res }) {
-  const context = await getContext(req, res)
-  const apolloClient = initApolloClient({ context })
+  const apolloClient = initApolloClient({
+    headers: { cookie: req.headers.cookie ?? '' },
+  })
 
   const { data } = await apolloClient.query({
     query: GET_STACK,

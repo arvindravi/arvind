@@ -4,7 +4,6 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { withProviders } from '~/components/Providers/withProviders'
 import { PostEditor } from '~/components/Writing/Editor/PostEditor'
-import { getContext } from '~/graphql/context'
 import { useViewerQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 
@@ -15,8 +14,9 @@ function NewPostPage() {
 }
 
 export async function getServerSideProps({ req, res }) {
-  const context = await getContext(req, res)
-  const apolloClient = initApolloClient({ context })
+  const apolloClient = initApolloClient({
+    headers: { cookie: req.headers.cookie ?? '' },
+  })
 
   return addApolloState(apolloClient, {
     props: {},

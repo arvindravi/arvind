@@ -4,7 +4,6 @@ import { BookmarkDetail } from '~/components/Bookmarks/BookmarkDetail'
 import { BookmarksList } from '~/components/Bookmarks/BookmarksList'
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { withProviders } from '~/components/Providers/withProviders'
-import { getContext } from '~/graphql/context'
 import { GET_BOOKMARKS } from '~/graphql/queries/bookmarks'
 import { GET_BOOKMARK } from '~/graphql/queries/bookmarks'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
@@ -18,8 +17,9 @@ function BookmarkPage({ id }) {
 }
 
 export async function getServerSideProps({ params: { id }, req, res }) {
-  const context = await getContext(req, res)
-  const apolloClient = initApolloClient({ context })
+  const apolloClient = initApolloClient({
+    headers: { cookie: req.headers.cookie ?? '' },
+  })
 
   await Promise.all([
     apolloClient.query({ query: GET_VIEWER }),

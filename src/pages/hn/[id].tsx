@@ -6,7 +6,6 @@ import { PostsList } from '~/components/HackerNews/PostsList'
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { withProviders } from '~/components/Providers/withProviders'
-import { getContext } from '~/graphql/context'
 import {
   GET_HACKER_NEWS_POST,
   GET_HACKER_NEWS_POSTS,
@@ -24,8 +23,9 @@ function HNPostPage({ id }) {
 }
 
 export async function getServerSideProps({ params: { id }, req, res }) {
-  const context = await getContext(req, res)
-  const apolloClient = initApolloClient({ context })
+  const apolloClient = initApolloClient({
+    headers: { cookie: req.headers.cookie ?? '' },
+  })
 
   await Promise.all([
     apolloClient.query({
