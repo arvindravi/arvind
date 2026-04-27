@@ -5,7 +5,6 @@ import { withProviders } from '~/components/Providers/withProviders'
 import { PostEditor } from '~/components/Writing/Editor/PostEditor'
 import { PostDetail } from '~/components/Writing/PostDetail'
 import { PostsList } from '~/components/Writing/PostsList'
-import { getContext } from '~/graphql/context'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_POST, GET_POSTS } from '~/graphql/queries/posts'
 import { GET_VIEWER } from '~/graphql/queries/viewer'
@@ -19,8 +18,9 @@ function WritingPostPage({ slug }) {
 }
 
 export async function getServerSideProps({ params: { slug }, req, res }) {
-  const context = await getContext(req, res)
-  const apolloClient = initApolloClient({ context })
+  const apolloClient = initApolloClient({
+    headers: { cookie: req.headers.cookie ?? '' },
+  })
 
   const { data } = await apolloClient.query({
     query: GET_POST,

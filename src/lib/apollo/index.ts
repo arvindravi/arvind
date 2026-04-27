@@ -17,12 +17,11 @@ import { APOLLO_STATE_PROP_NAME, GRAPHQL_ENDPOINT } from '~/graphql/constants'
 
 let apolloClient
 
-function createLink() {
-  // Use HttpLink for both client and server side
-  // This simplifies the setup and removes dependency on deprecated @apollo/link-schema
+function createLink(headers: Record<string, string> = {}) {
   return new HttpLink({
     uri: GRAPHQL_ENDPOINT || '/api/graphql',
     credentials: 'include',
+    headers,
   })
 }
 
@@ -49,8 +48,14 @@ const errorLink = new ErrorLink(({ error }) => {
   }
 })
 
-export function createApolloClient({ initialState = {}, context = {} }) {
-  const link = ApolloLink.from([errorLink, createLink()])
+export function createApolloClient({
+  initialState = {},
+  headers = {},
+}: {
+  initialState?: any
+  headers?: Record<string, string>
+}) {
+  const link = ApolloLink.from([errorLink, createLink(headers)])
   const ssrMode = typeof window === 'undefined'
   const cache = new InMemoryCache({
     typePolicies: {
@@ -92,9 +97,15 @@ export function createApolloClient({ initialState = {}, context = {} }) {
   })
 }
 
-export function initApolloClient({ initialState = null, context = {} }) {
+export function initApolloClient({
+  initialState = null,
+  headers = {},
+}: {
+  initialState?: any
+  headers?: Record<string, string>
+}) {
   const _apolloClient =
-    apolloClient ?? createApolloClient({ initialState, context })
+    apolloClient ?? createApolloClient({ initialState, headers })
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // gets hydrated here

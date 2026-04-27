@@ -4,7 +4,6 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { withProviders } from '~/components/Providers/withProviders'
 import { PostEditor } from '~/components/Writing/Editor/PostEditor'
-import { getContext } from '~/graphql/context'
 import { GET_POST } from '~/graphql/queries/posts'
 import { GET_VIEWER } from '~/graphql/queries/viewer'
 import { useViewerQuery } from '~/graphql/types.generated'
@@ -17,8 +16,9 @@ function EditPostPage({ slug }) {
 }
 
 export async function getServerSideProps({ params: { slug }, req, res }) {
-  const context = await getContext(req, res)
-  const apolloClient = initApolloClient({ context })
+  const apolloClient = initApolloClient({
+    headers: { cookie: req.headers.cookie ?? '' },
+  })
 
   await Promise.all([
     apolloClient.query({ query: GET_VIEWER }),

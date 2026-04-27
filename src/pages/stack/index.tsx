@@ -5,7 +5,6 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { withProviders } from '~/components/Providers/withProviders'
 import { StackList } from '~/components/Stack/StackList'
 import routes from '~/config/routes'
-import { getContext } from '~/graphql/context'
 import { GET_STACKS } from '~/graphql/queries/stack'
 import { GET_VIEWER } from '~/graphql/queries/viewer'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
@@ -31,8 +30,9 @@ StackPage.getLayout = withProviders(function getLayout(page) {
 })
 
 export async function getServerSideProps({ req, res }) {
-  const context = await getContext(req, res)
-  const apolloClient = initApolloClient({ context })
+  const apolloClient = initApolloClient({
+    headers: { cookie: req.headers.cookie ?? '' },
+  })
 
   await Promise.all([
     apolloClient.query({ query: GET_VIEWER }),

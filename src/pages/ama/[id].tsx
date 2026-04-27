@@ -4,7 +4,6 @@ import { QuestionDetail } from '~/components/AMA/QuestionDetail'
 import { QuestionsList } from '~/components/AMA/QuestionsList'
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { withProviders } from '~/components/Providers/withProviders'
-import { getContext } from '~/graphql/context'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_QUESTION, GET_QUESTIONS } from '~/graphql/queries/questions'
 import { GET_VIEWER } from '~/graphql/queries/viewer'
@@ -16,8 +15,9 @@ function QuestionDetailPage({ id }) {
 }
 
 export async function getServerSideProps({ params: { id }, req, res }) {
-  const context = await getContext(req, res)
-  const apolloClient = initApolloClient({ context })
+  const apolloClient = initApolloClient({
+    headers: { cookie: req.headers.cookie ?? '' },
+  })
 
   await Promise.all([
     apolloClient.query({
