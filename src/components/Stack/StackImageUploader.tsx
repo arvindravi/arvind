@@ -12,18 +12,38 @@ export function StackImageUploader({ stack, onImageUploaded }) {
   const [previewImage, setPreviewImage] = useState(null)
 
   async function getSignedUrl() {
-    const data = await fetch('/api/images/sign').then((res) => res.json())
-    return data?.uploadURL
+    const res = await fetch('/api/images/sign')
+    if (!res.ok) {
+      const detail = await res.json().catch(() => null)
+      console.error(
+        '[StackImageUploader] sign endpoint failed',
+        res.status,
+        detail
+      )
+      return null
+    }
+    const data = await res.json()
+    return data?.uploadURL ?? null
   }
 
   async function uploadFile({ file, signedUrl }) {
     const data = new FormData()
     data.append('file', file)
-    const upload = await fetch(signedUrl, {
+    const r = await fetch(signedUrl, {
       method: 'POST',
       body: data,
-    }).then((r) => r.json())
-    return upload?.result?.id
+    })
+    if (!r.ok) {
+      const detail = await r.json().catch(() => null)
+      console.error(
+        '[StackImageUploader] Cloudflare upload failed',
+        r.status,
+        detail
+      )
+      return null
+    }
+    const upload = await r.json()
+    return upload?.result?.id ?? null
   }
 
   const onDrop = useCallback(async (acceptedFiles) => {
