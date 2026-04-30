@@ -15,6 +15,7 @@ interface UploadedImage {
 interface Props {
   initial?: UploadedImage | null
   onImageUploaded: (image: UploadedImage | null) => void
+  onError?: (message: string) => void
 }
 
 function getImageDimensions(file: File): Promise<{
@@ -36,55 +37,92 @@ function getImageDimensions(file: File): Promise<{
   })
 }
 
-export function PhotographImageUploader({ initial, onImageUploaded }: Props) {
+async function getSignedUrl(): Promise<string | null> {
+  const res = await fetch('/api/images/sign')
+  if (!res.ok) {
+    const detail = await res.json().catch(() => null)
+    console.error(
+      '[PhotographImageUploader] sign endpoint failed',
+      res.status,
+      detail
+    )
+    return null
+  }
+  const data = await res.json()
+  return data?.uploadURL ?? null
+}
+
+async function uploadFile({
+  file,
+  signedUrl,
+}: {
+  file: File
+  signedUrl: string
+}): Promise<string | null> {
+  const body = new FormData()
+  body.append('file', file)
+  const r = await fetch(signedUrl, { method: 'POST', body })
+  if (!r.ok) {
+    const detail = await r.json().catch(() => null)
+    console.error(
+      '[PhotographImageUploader] Cloudflare upload failed',
+      r.status,
+      detail
+    )
+    return null
+  }
+  const upload = await r.json()
+  return upload?.result?.id ?? null
+}
+
+export function PhotographImageUploader({
+  initial,
+  onImageUploaded,
+  onError,
+}: Props) {
   const [loading, setLoading] = useState(false)
   const [preview, setPreview] = useState<UploadedImage | null>(initial ?? null)
-
-  async function getSignedUrl() {
-    const data = await fetch('/api/images/sign').then((res) => res.json())
-    return data?.uploadURL
-  }
-
-  async function uploadFile({ file, signedUrl }) {
-    const data = new FormData()
-    data.append('file', file)
-    const upload = await fetch(signedUrl, {
-      method: 'POST',
-      body: data,
-    }).then((r) => r.json())
-    return upload?.result?.id
-  }
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setLoading(true)
     const file = acceptedFiles[0]
 
-    let dimensions: { width: number; height: number }
     try {
-      dimensions = await getImageDimensions(file)
+      let dimensions: { width: number; height: number }
+      try {
+        dimensions = await getImageDimensions(file)
+      } catch {
+        onError?.('Could not read image dimensions — try a different file')
+        setLoading(false)
+        return
+      }
+
+      const signedUrl = await getSignedUrl()
+      if (!signedUrl) {
+        onError?.(
+          'Could not get upload URL — check that you are signed in as admin and CLOUDFLARE_* env vars are set'
+        )
+        setLoading(false)
+        return
+      }
+
+      const id = await uploadFile({ file, signedUrl })
+      if (!id) {
+        onError?.('Cloudflare rejected the upload — see console for details')
+        setLoading(false)
+        return
+      }
+
+      const url = `${CLOUDFLARE_IMAGE_DELIVERY_BASE_URL}/${id}/public`
+      const next = { url, width: dimensions.width, height: dimensions.height }
+      setPreview(next)
+      onImageUploaded(next)
     } catch (err) {
-      console.error({ err })
+      console.error('[PhotographImageUploader] unexpected error', err)
+      onError?.('Unexpected error during upload — see console for details')
+    } finally {
       setLoading(false)
-      return
     }
-
-    const signedUrl = await getSignedUrl()
-    if (!signedUrl) {
-      setLoading(false)
-      return console.error('No signed url')
-    }
-
-    const id = await uploadFile({ file, signedUrl })
-    if (!id) {
-      setLoading(false)
-      return console.error('Upload failed')
-    }
-
-    const url = `${CLOUDFLARE_IMAGE_DELIVERY_BASE_URL}/${id}/public`
-    const next = { url, width: dimensions.width, height: dimensions.height }
-    setLoading(false)
-    setPreview(next)
-    return onImageUploaded(next)
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({

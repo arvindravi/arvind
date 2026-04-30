@@ -41,8 +41,20 @@ Edit `.env.local` and fill in your values:
 - **Auth0:** Set up an Auth0 application with Twitter connection
 - **Database:** Configure your PostgreSQL connection string
 - **Postmark:** Add your server token for email notifications
+- **Cloudflare Images:** See below
 
-### 3. Database Setup
+### 3. Cloudflare Images Setup
+
+Photograph and stack image uploads go through [Cloudflare Images](https://developers.cloudflare.com/images/). You need:
+
+- **`CLOUDFLARE_ACCOUNT_ID`** — visible in the right sidebar of your Cloudflare dashboard.
+- **`CLOUDFLARE_IMAGES_KEY`** — create an API Token under *My Profile → API Tokens* with the **Cloudflare Images:Edit** permission scoped to your account.
+
+The delivery base URL (the hash in `src/lib/cloudflare/index.ts`) is account-specific. Update it to match your Cloudflare Images delivery domain if you are running under a different account.
+
+Without these vars the `/api/images/sign` endpoint returns 503 and uploads will fail with an in-form error message.
+
+### 4. Database Setup
 
 ```bash
 # If using PlanetScale
