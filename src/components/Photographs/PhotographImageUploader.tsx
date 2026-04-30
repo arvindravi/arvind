@@ -41,7 +41,11 @@ async function getSignedUrl(): Promise<string | null> {
   const res = await fetch('/api/images/sign')
   if (!res.ok) {
     const detail = await res.json().catch(() => null)
-    console.error('[PhotographImageUploader] sign endpoint failed', res.status, detail)
+    console.error(
+      '[PhotographImageUploader] sign endpoint failed',
+      res.status,
+      detail
+    )
     return null
   }
   const data = await res.json()
@@ -60,14 +64,22 @@ async function uploadFile({
   const r = await fetch(signedUrl, { method: 'POST', body })
   if (!r.ok) {
     const detail = await r.json().catch(() => null)
-    console.error('[PhotographImageUploader] Cloudflare upload failed', r.status, detail)
+    console.error(
+      '[PhotographImageUploader] Cloudflare upload failed',
+      r.status,
+      detail
+    )
     return null
   }
   const upload = await r.json()
   return upload?.result?.id ?? null
 }
 
-export function PhotographImageUploader({ initial, onImageUploaded, onError }: Props) {
+export function PhotographImageUploader({
+  initial,
+  onImageUploaded,
+  onError,
+}: Props) {
   const [loading, setLoading] = useState(false)
   const [preview, setPreview] = useState<UploadedImage | null>(initial ?? null)
 
