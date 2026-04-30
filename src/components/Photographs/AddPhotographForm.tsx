@@ -85,7 +85,7 @@ export function AddPhotographForm({ closeModal }) {
 
   return (
     <div className="space-y-3 p-4">
-      <PhotographImageUploader onImageUploaded={setImage} />
+      <PhotographImageUploader onImageUploaded={setImage} onError={setError} />
       <form className="space-y-3" onSubmit={onSubmit}>
         <Input
           type="text"
