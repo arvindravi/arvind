@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDropzone } from 'react-dropzone'
 
-import { CLOUDFLARE_IMAGE_DELIVERY_BASE_URL } from '~/lib/cloudflare'
+import { uploadImage } from '~/lib/storage/upload'
 
 import { ActiveDropzone } from './ActiveDropzone'
 
@@ -15,52 +15,15 @@ interface DropzoneProps {
 export function Dropzone(props: DropzoneProps) {
   const { children, onUploadComplete, onUploadStarted, onUploadFailed } = props
 
-  async function getSignedUrl() {
-    const res = await fetch('/api/images/sign')
-    if (!res.ok) {
-      const detail = await res.json().catch(() => null)
-      console.error('[Dropzone] sign endpoint failed', res.status, detail)
-      return null
-    }
-    const data = await res.json()
-    return data?.uploadURL ?? null
-  }
-
-  async function uploadFile({ file, signedUrl }) {
-    const data = new FormData()
-    data.append('file', file)
-    const r = await fetch(signedUrl, {
-      method: 'POST',
-      body: data,
-    })
-    if (!r.ok) {
-      const detail = await r.json().catch(() => null)
-      console.error('[Dropzone] Cloudflare upload failed', r.status, detail)
-      return null
-    }
-    const upload = await r.json()
-    return upload?.result?.id ?? null
-  }
-
   const onDropAccepted = React.useCallback(async (acceptedFiles: File[]) => {
     onUploadStarted()
-
-    const file = acceptedFiles[0]
-    const signedUrl = await getSignedUrl()
-
-    if (!signedUrl) {
+    try {
+      const url = await uploadImage(acceptedFiles[0])
+      onUploadComplete(url)
+    } catch (err) {
+      console.error('[Dropzone] upload error', err)
       onUploadFailed()
-      return console.error('No signed url')
     }
-
-    const id = await uploadFile({ file, signedUrl })
-    if (!id) {
-      onUploadFailed()
-      return console.error('Upload failed')
-    }
-
-    const url = `${CLOUDFLARE_IMAGE_DELIVERY_BASE_URL}/${id}/public`
-    return onUploadComplete(url)
   }, [])
 
   function onDropRejected() {

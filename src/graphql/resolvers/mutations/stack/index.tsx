@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch'
 import slugify from 'slugify'
 
 import { Context } from '~/graphql/context'
@@ -10,6 +9,7 @@ import {
   MutationToggleStackUserArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
+import { deleteImage } from '~/lib/storage/delete'
 import { validUrl } from '~/lib/validators'
 
 export async function editStack(_, args: MutationEditStackArgs, ctx: Context) {
@@ -29,24 +29,7 @@ export async function editStack(_, args: MutationEditStackArgs, ctx: Context) {
   const old = await prisma.stack.findUnique({ where: { id } })
 
   if (old.image !== data.image) {
-    try {
-      const url = new URL(old.image)
-      if (validUrl(url)) {
-        const [, , imageId] = url.pathname.split('/')
-
-        await fetch(
-          `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/images/v1/${imageId}`,
-          {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${process.env.CLOUDFLARE_IMAGES_KEY}`,
-            },
-          }
-        )
-      }
-    } catch (err) {
-      console.error({ err })
-    }
+    await deleteImage(old.image).catch(console.error)
   }
 
   await prisma.stack.update({
@@ -137,23 +120,7 @@ export async function deleteStack(
 
   const old = await prisma.stack.findUnique({ where: { id } })
 
-  try {
-    const url = new URL(old.image)
-    const [, , imageId] = url.pathname.split('/')
-    if (validUrl(url)) {
-      await fetch(
-        `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/images/v1/${imageId}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${process.env.CLOUDFLARE_IMAGES_KEY}`,
-          },
-        }
-      )
-    }
-  } catch (err) {
-    console.error({ err })
-  }
+  await deleteImage(old.image).catch(console.error)
 
   return await prisma.stack
     .delete({

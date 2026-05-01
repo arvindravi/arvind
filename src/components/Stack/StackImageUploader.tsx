@@ -4,68 +4,24 @@ import { useDropzone } from 'react-dropzone'
 import { Trash, Upload } from 'react-feather'
 
 import { LoadingSpinner } from '~/components/LoadingSpinner'
-import { CLOUDFLARE_IMAGE_DELIVERY_BASE_URL } from '~/lib/cloudflare'
+import { uploadImage } from '~/lib/storage/upload'
 
 export function StackImageUploader({ stack, onImageUploaded }) {
   const [loading, setLoading] = useState(false)
   const [initialImage, setInitialImage] = useState(stack?.image)
   const [previewImage, setPreviewImage] = useState(null)
 
-  async function getSignedUrl() {
-    const res = await fetch('/api/images/sign')
-    if (!res.ok) {
-      const detail = await res.json().catch(() => null)
-      console.error(
-        '[StackImageUploader] sign endpoint failed',
-        res.status,
-        detail
-      )
-      return null
-    }
-    const data = await res.json()
-    return data?.uploadURL ?? null
-  }
-
-  async function uploadFile({ file, signedUrl }) {
-    const data = new FormData()
-    data.append('file', file)
-    const r = await fetch(signedUrl, {
-      method: 'POST',
-      body: data,
-    })
-    if (!r.ok) {
-      const detail = await r.json().catch(() => null)
-      console.error(
-        '[StackImageUploader] Cloudflare upload failed',
-        r.status,
-        detail
-      )
-      return null
-    }
-    const upload = await r.json()
-    return upload?.result?.id ?? null
-  }
-
   const onDrop = useCallback(async (acceptedFiles) => {
     setLoading(true)
-    const file = acceptedFiles[0]
-    const signedUrl = await getSignedUrl()
-
-    if (!signedUrl) {
+    try {
+      const url = await uploadImage(acceptedFiles[0])
+      setPreviewImage(url)
+      onImageUploaded(url)
+    } catch (err) {
+      console.error('[StackImageUploader] upload error', err)
+    } finally {
       setLoading(false)
-      return console.error('No signed url')
     }
-
-    const id = await uploadFile({ file, signedUrl })
-    if (!id) {
-      setLoading(false)
-      return console.error('Upload failed')
-    }
-
-    const url = `${CLOUDFLARE_IMAGE_DELIVERY_BASE_URL}/${id}/stack`
-    setLoading(false)
-    setPreviewImage(url)
-    return onImageUploaded(url)
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({

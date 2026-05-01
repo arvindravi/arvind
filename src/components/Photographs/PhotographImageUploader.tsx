@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone'
 import { Trash, Upload } from 'react-feather'
 
 import { LoadingSpinner } from '~/components/LoadingSpinner'
-import { CLOUDFLARE_IMAGE_DELIVERY_BASE_URL } from '~/lib/cloudflare'
+import { uploadImage } from '~/lib/storage/upload'
 
 interface UploadedImage {
   url: string
@@ -37,44 +37,6 @@ function getImageDimensions(file: File): Promise<{
   })
 }
 
-async function getSignedUrl(): Promise<string | null> {
-  const res = await fetch('/api/images/sign')
-  if (!res.ok) {
-    const detail = await res.json().catch(() => null)
-    console.error(
-      '[PhotographImageUploader] sign endpoint failed',
-      res.status,
-      detail
-    )
-    return null
-  }
-  const data = await res.json()
-  return data?.uploadURL ?? null
-}
-
-async function uploadFile({
-  file,
-  signedUrl,
-}: {
-  file: File
-  signedUrl: string
-}): Promise<string | null> {
-  const body = new FormData()
-  body.append('file', file)
-  const r = await fetch(signedUrl, { method: 'POST', body })
-  if (!r.ok) {
-    const detail = await r.json().catch(() => null)
-    console.error(
-      '[PhotographImageUploader] Cloudflare upload failed',
-      r.status,
-      detail
-    )
-    return null
-  }
-  const upload = await r.json()
-  return upload?.result?.id ?? null
-}
-
 export function PhotographImageUploader({
   initial,
   onImageUploaded,
@@ -93,33 +55,16 @@ export function PhotographImageUploader({
         dimensions = await getImageDimensions(file)
       } catch {
         onError?.('Could not read image dimensions — try a different file')
-        setLoading(false)
         return
       }
 
-      const signedUrl = await getSignedUrl()
-      if (!signedUrl) {
-        onError?.(
-          'Could not get upload URL — check that you are signed in as admin and CLOUDFLARE_* env vars are set'
-        )
-        setLoading(false)
-        return
-      }
-
-      const id = await uploadFile({ file, signedUrl })
-      if (!id) {
-        onError?.('Cloudflare rejected the upload — see console for details')
-        setLoading(false)
-        return
-      }
-
-      const url = `${CLOUDFLARE_IMAGE_DELIVERY_BASE_URL}/${id}/public`
+      const url = await uploadImage(file)
       const next = { url, width: dimensions.width, height: dimensions.height }
       setPreview(next)
       onImageUploaded(next)
     } catch (err) {
-      console.error('[PhotographImageUploader] unexpected error', err)
-      onError?.('Unexpected error during upload — see console for details')
+      console.error('[PhotographImageUploader] upload error', err)
+      onError?.('Upload failed — ' + (err as Error).message)
     } finally {
       setLoading(false)
     }
