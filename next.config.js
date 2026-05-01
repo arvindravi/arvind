@@ -6,7 +6,12 @@ module.exports = withPlausibleProxy()({
     dirs: ['src'],
   },
   images: {
-    domains: ['pbs.twimg.com', 'abs.twimg.com', 'imagedelivery.net'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'pbs.twimg.com' },
+      { protocol: 'https', hostname: 'abs.twimg.com' },
+      { protocol: 'https', hostname: 'imagedelivery.net' },
+      { protocol: 'https', hostname: '*.public.blob.vercel-storage.com' },
+    ],
   },
   webpack: (config) => {
     config.resolve.alias = {

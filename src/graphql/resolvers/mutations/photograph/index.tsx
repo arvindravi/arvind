@@ -1,5 +1,3 @@
-import fetch from 'isomorphic-unfetch'
-
 import { Context } from '~/graphql/context'
 import { UserInputError } from '~/graphql/helpers/errors'
 import {
@@ -8,27 +6,7 @@ import {
   MutationEditPhotographArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
-import { validUrl } from '~/lib/validators'
-
-async function deleteCloudflareImage(imageUrl: string) {
-  try {
-    const url = new URL(imageUrl)
-    if (!validUrl(url)) return
-    const [, , imageId] = url.pathname.split('/')
-    if (!imageId) return
-    await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/images/v1/${imageId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${process.env.CLOUDFLARE_IMAGES_KEY}`,
-        },
-      }
-    )
-  } catch (err) {
-    console.error({ err })
-  }
-}
+import { deleteImage } from '~/lib/storage/delete'
 
 export async function addPhotograph(
   _,
@@ -179,7 +157,8 @@ export async function deletePhotograph(
   const { prisma } = ctx
 
   const existing = await prisma.photograph.findUnique({ where: { id } })
-  if (existing?.imageUrl) await deleteCloudflareImage(existing.imageUrl)
+  if (existing?.imageUrl)
+    await deleteImage(existing.imageUrl).catch(console.error)
 
   return await prisma.photograph
     .delete({ where: { id } })
