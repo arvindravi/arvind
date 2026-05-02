@@ -15,19 +15,21 @@ export const PhotographListItem = React.memo<Props>(
       <Link
         href="/photographs/[slug]"
         as={`/photographs/${photograph.slug}`}
-        className={`relative block aspect-square overflow-hidden rounded-xl ${
+        className={`relative block aspect-square rounded-xl bg-white p-1.5 shadow-sm transition-shadow hover:shadow-md ${
           active
             ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900'
             : ''
         }`}
       >
-        <Image
-          src={photograph.imageUrl}
-          alt={photograph.title}
-          fill
-          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          className="object-cover"
-        />
+        <div className="relative h-full w-full overflow-hidden rounded-md">
+          <Image
+            src={photograph.imageUrl}
+            alt={photograph.title}
+            fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover"
+          />
+        </div>
       </Link>
     )
   }
