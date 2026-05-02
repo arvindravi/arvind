@@ -50,7 +50,7 @@ export function PhotographsList() {
           No photographs yet.
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-1 p-3 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 p-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4 lg:gap-6">
           {edges.map((edge) => {
             const active = router.query.slug === edge.node.slug
             return (

@@ -74,16 +74,18 @@ export function PhotographDetail({ slug }) {
 
         <Detail.ContentContainer>
           <Detail.Header>
-            <div className="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-900">
-              <Image
-                priority
-                src={photograph.imageUrl}
-                width={photograph.width}
-                height={photograph.height}
-                alt={photograph.title}
-                sizes="(max-width: 768px) 100vw, 768px"
-                className="h-auto w-full"
-              />
+            <div className="rounded-xl bg-white p-2 shadow-sm md:p-3">
+              <div className="overflow-hidden rounded-md">
+                <Image
+                  priority
+                  src={photograph.imageUrl}
+                  width={photograph.width}
+                  height={photograph.height}
+                  alt={photograph.title}
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  className="h-auto w-full"
+                />
+              </div>
             </div>
 
             <div className="flex flex-col space-y-2">
