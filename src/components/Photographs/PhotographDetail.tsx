@@ -74,8 +74,8 @@ export function PhotographDetail({ slug }) {
 
         <Detail.ContentContainer>
           <Detail.Header>
-            <div className="rounded-xl bg-white p-2 shadow-sm md:p-3">
-              <div className="overflow-hidden rounded-md">
+            <div className="bg-white p-2 shadow-sm md:p-3">
+              <div className="overflow-hidden">
                 <Image
                   priority
                   src={photograph.imageUrl}
