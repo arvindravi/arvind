@@ -7,9 +7,7 @@ import { generateRSS } from '~/lib/rss'
 const JSONFeed: React.FC = () => null
 
 export async function getServerSideProps({ req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
-  })
+  const apolloClient = initApolloClient()
   const {
     data: { posts },
   } = await apolloClient.query({

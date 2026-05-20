@@ -10,7 +10,8 @@ import {
   GET_HACKER_NEWS_POST,
   GET_HACKER_NEWS_POSTS,
 } from '~/graphql/queries/hackerNews'
-import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { addApolloState } from '~/lib/apollo'
+import { initStaticApolloClient } from '~/lib/apollo/static'
 
 function HNPostPage({ id }) {
   const router = useRouter()
@@ -22,27 +23,28 @@ function HNPostPage({ id }) {
   return <PostDetail id={id} />
 }
 
-export async function getServerSideProps({ params: { id }, req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
+export async function getStaticPaths() {
+  return { paths: [], fallback: 'blocking' }
+}
+
+export async function getStaticProps({ params: { id } }) {
+  const apolloClient = initStaticApolloClient()
+
+  const { data } = await apolloClient.query<any>({
+    query: GET_HACKER_NEWS_POST,
+    variables: { id },
   })
 
-  await Promise.all([
-    apolloClient.query({
-      query: GET_HACKER_NEWS_POSTS,
-    }),
+  if (!data?.hackerNewsPost) {
+    return { notFound: true, revalidate: 60 }
+  }
 
-    apolloClient.query({
-      query: GET_HACKER_NEWS_POST,
-      variables: { id },
-    }),
-  ])
+  await apolloClient.query({ query: GET_HACKER_NEWS_POSTS })
 
-  return addApolloState(apolloClient, {
-    props: {
-      id,
-    },
-  })
+  return {
+    ...addApolloState(apolloClient, { props: { id } }),
+    revalidate: 60,
+  }
 }
 
 HNPostPage.getLayout = withProviders(function getLayout(page) {
