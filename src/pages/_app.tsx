@@ -6,6 +6,7 @@ import * as React from 'react'
 
 import { SiteLayout } from '~/components/Layouts'
 import { Providers } from '~/components/Providers'
+import { TopProgressBar } from '~/components/TopProgressBar'
 
 export default function App({ Component, pageProps }) {
   const getLayout =
@@ -16,5 +17,10 @@ export default function App({ Component, pageProps }) {
       </Providers>
     ))
 
-  return getLayout(<Component {...pageProps} />)
+  return (
+    <>
+      <TopProgressBar />
+      {getLayout(<Component {...pageProps} />)}
+    </>
+  )
 }
