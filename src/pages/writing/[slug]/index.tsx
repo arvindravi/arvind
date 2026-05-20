@@ -1,10 +1,20 @@
+import dynamic from 'next/dynamic'
 import * as React from 'react'
 
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { withProviders } from '~/components/Providers/withProviders'
-import { PostEditor } from '~/components/Writing/Editor/PostEditor'
 import { PostDetail } from '~/components/Writing/PostDetail'
 import { PostsList } from '~/components/Writing/PostsList'
+
+// PostEditor is only rendered when an admin views an unpublished post (draft).
+// Code-split it out of the public reader bundle — the editor pulls in
+// markdown editing UI, dropzone upload, and several form components that
+// public readers never see.
+const PostEditor = dynamic(
+  () =>
+    import('~/components/Writing/Editor/PostEditor').then((m) => m.PostEditor),
+  { ssr: false }
+)
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_POST, GET_POSTS } from '~/graphql/queries/posts'
 import { CommentType, useGetPostQuery } from '~/graphql/types.generated'
