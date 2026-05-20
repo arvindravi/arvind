@@ -6,43 +6,42 @@ import { StackDetail } from '~/components/Stack/StackDetail'
 import { StackList } from '~/components/Stack/StackList'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_STACK, GET_STACKS } from '~/graphql/queries/stack'
-import { GET_VIEWER } from '~/graphql/queries/viewer'
 import { CommentType } from '~/graphql/types.generated'
-import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { addApolloState } from '~/lib/apollo'
+import { initStaticApolloClient } from '~/lib/apollo/static'
 
 function StackDetailPage({ slug }) {
   return <StackDetail slug={slug} />
 }
 
-export async function getServerSideProps({ params: { slug }, req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
-  })
+export async function getStaticPaths() {
+  return { paths: [], fallback: 'blocking' }
+}
 
-  const { data } = await apolloClient.query({
+export async function getStaticProps({ params: { slug } }) {
+  const apolloClient = initStaticApolloClient()
+
+  const { data } = await apolloClient.query<any>({
     query: GET_STACK,
     variables: { slug },
   })
 
+  if (!data?.stack) {
+    return { notFound: true, revalidate: 60 }
+  }
+
   await Promise.all([
-    apolloClient.query({ query: GET_VIEWER }),
-
+    apolloClient.query({ query: GET_STACKS }),
     apolloClient.query({
-      query: GET_STACKS,
+      query: GET_COMMENTS,
+      variables: { refId: data.stack.id, type: CommentType.Stack },
     }),
-
-    data?.stack &&
-      apolloClient.query({
-        query: GET_COMMENTS,
-        variables: { refId: data.stack.id, type: CommentType.Stack },
-      }),
   ])
 
-  return addApolloState(apolloClient, {
-    props: {
-      slug,
-    },
-  })
+  return {
+    ...addApolloState(apolloClient, { props: { slug } }),
+    revalidate: 60,
+  }
 }
 
 StackDetailPage.getLayout = withProviders(function getLayout(page) {

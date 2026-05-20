@@ -6,9 +6,9 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { withProviders } from '~/components/Providers/withProviders'
 import routes from '~/config/routes'
 import { GET_QUESTIONS } from '~/graphql/queries/questions'
-import { GET_VIEWER } from '~/graphql/queries/viewer'
 import { QuestionStatus } from '~/graphql/types.generated'
-import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { addApolloState } from '~/lib/apollo'
+import { initStaticApolloClient } from '~/lib/apollo/static'
 
 function AmaPage() {
   return (
@@ -20,25 +20,20 @@ function AmaPage() {
   )
 }
 
-export async function getServerSideProps({ req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
+export async function getStaticProps() {
+  const apolloClient = initStaticApolloClient()
+
+  await apolloClient.query({
+    query: GET_QUESTIONS,
+    variables: {
+      filter: { status: QuestionStatus.Answered },
+    },
   })
 
-  await Promise.all([
-    apolloClient.query({ query: GET_VIEWER }),
-
-    apolloClient.query({
-      query: GET_QUESTIONS,
-      variables: {
-        filter: { status: QuestionStatus.Answered },
-      },
-    }),
-  ])
-
-  return addApolloState(apolloClient, {
-    props: {},
-  })
+  return {
+    ...addApolloState(apolloClient, { props: {} }),
+    revalidate: 60,
+  }
 }
 
 AmaPage.getLayout = withProviders(function getLayout(page) {

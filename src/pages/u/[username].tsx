@@ -3,8 +3,8 @@ import * as React from 'react'
 import { ListDetailView } from '~/components/Layouts'
 import { UserDetail } from '~/components/UserProfile/UserDetail'
 import { GET_USER } from '~/graphql/queries/user'
-import { GET_VIEWER } from '~/graphql/queries/viewer'
-import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { addApolloState } from '~/lib/apollo'
+import { initStaticApolloClient } from '~/lib/apollo/static'
 
 export default function UserPage({ username }) {
   return (
@@ -16,23 +16,24 @@ export default function UserPage({ username }) {
   )
 }
 
-export async function getServerSideProps({ params: { username }, req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
+export async function getStaticPaths() {
+  return { paths: [], fallback: 'blocking' }
+}
+
+export async function getStaticProps({ params: { username } }) {
+  const apolloClient = initStaticApolloClient()
+
+  const { data } = await apolloClient.query<any>({
+    query: GET_USER,
+    variables: { username },
   })
 
-  await Promise.all([
-    apolloClient.query({ query: GET_VIEWER }),
+  if (!data?.user) {
+    return { notFound: true, revalidate: 60 }
+  }
 
-    apolloClient.query({
-      query: GET_USER,
-      variables: { username },
-    }),
-  ])
-
-  return addApolloState(apolloClient, {
-    props: {
-      username,
-    },
-  })
+  return {
+    ...addApolloState(apolloClient, { props: { username } }),
+    revalidate: 60,
+  }
 }

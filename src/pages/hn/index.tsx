@@ -6,7 +6,8 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { withProviders } from '~/components/Providers/withProviders'
 import routes from '~/config/routes'
 import { GET_HACKER_NEWS_POSTS } from '~/graphql/queries/hackerNews'
-import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { addApolloState } from '~/lib/apollo'
+import { initStaticApolloClient } from '~/lib/apollo/static'
 
 function HNPage() {
   return (
@@ -18,18 +19,15 @@ function HNPage() {
   )
 }
 
-export async function getServerSideProps({ req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
-  })
+export async function getStaticProps() {
+  const apolloClient = initStaticApolloClient()
 
-  await apolloClient.query({
-    query: GET_HACKER_NEWS_POSTS,
-  })
+  await apolloClient.query({ query: GET_HACKER_NEWS_POSTS })
 
-  return addApolloState(apolloClient, {
-    props: {},
-  })
+  return {
+    ...addApolloState(apolloClient, { props: {} }),
+    revalidate: 60,
+  }
 }
 
 HNPage.getLayout = withProviders(function getLayout(page) {

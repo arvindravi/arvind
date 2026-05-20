@@ -16,9 +16,7 @@ function EditPostPage({ slug }) {
 }
 
 export async function getServerSideProps({ params: { slug }, req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
-  })
+  const apolloClient = initApolloClient()
 
   await Promise.all([
     apolloClient.query({ query: GET_VIEWER }),

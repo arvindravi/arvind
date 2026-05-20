@@ -6,8 +6,8 @@ import { withProviders } from '~/components/Providers/withProviders'
 import { StackList } from '~/components/Stack/StackList'
 import routes from '~/config/routes'
 import { GET_STACKS } from '~/graphql/queries/stack'
-import { GET_VIEWER } from '~/graphql/queries/viewer'
-import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { addApolloState } from '~/lib/apollo'
+import { initStaticApolloClient } from '~/lib/apollo/static'
 
 function StackPage() {
   return (
@@ -29,19 +29,15 @@ StackPage.getLayout = withProviders(function getLayout(page) {
   )
 })
 
-export async function getServerSideProps({ req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
-  })
+export async function getStaticProps() {
+  const apolloClient = initStaticApolloClient()
 
-  await Promise.all([
-    apolloClient.query({ query: GET_VIEWER }),
-    apolloClient.query({ query: GET_STACKS }),
-  ])
+  await apolloClient.query({ query: GET_STACKS })
 
-  return addApolloState(apolloClient, {
-    props: {},
-  })
+  return {
+    ...addApolloState(apolloClient, { props: {} }),
+    revalidate: 60,
+  }
 }
 
 export default StackPage

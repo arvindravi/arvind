@@ -6,45 +6,45 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { withProviders } from '~/components/Providers/withProviders'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_QUESTION, GET_QUESTIONS } from '~/graphql/queries/questions'
-import { GET_VIEWER } from '~/graphql/queries/viewer'
 import { CommentType, QuestionStatus } from '~/graphql/types.generated'
-import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { addApolloState } from '~/lib/apollo'
+import { initStaticApolloClient } from '~/lib/apollo/static'
 
 function QuestionDetailPage({ id }) {
   return <QuestionDetail id={id} />
 }
 
-export async function getServerSideProps({ params: { id }, req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
+export async function getStaticPaths() {
+  return { paths: [], fallback: 'blocking' }
+}
+
+export async function getStaticProps({ params: { id } }) {
+  const apolloClient = initStaticApolloClient()
+
+  const { data } = await apolloClient.query<any>({
+    query: GET_QUESTION,
+    variables: { id },
   })
+
+  if (!data?.question) {
+    return { notFound: true, revalidate: 60 }
+  }
 
   await Promise.all([
     apolloClient.query({
       query: GET_QUESTIONS,
-      variables: {
-        filter: { status: QuestionStatus.Answered },
-      },
+      variables: { filter: { status: QuestionStatus.Answered } },
     }),
-
-    apolloClient.query({
-      query: GET_QUESTION,
-      variables: { id },
-    }),
-
     apolloClient.query({
       query: GET_COMMENTS,
       variables: { refId: id, type: CommentType.Question },
     }),
-
-    apolloClient.query({ query: GET_VIEWER }),
   ])
 
-  return addApolloState(apolloClient, {
-    props: {
-      id,
-    },
-  })
+  return {
+    ...addApolloState(apolloClient, { props: { id } }),
+    revalidate: 60,
+  }
 }
 
 QuestionDetailPage.getLayout = withProviders(function getLayout(page) {

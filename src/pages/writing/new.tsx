@@ -14,9 +14,7 @@ function NewPostPage() {
 }
 
 export async function getServerSideProps({ req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
-  })
+  const apolloClient = initApolloClient()
 
   return addApolloState(apolloClient, {
     props: {},

@@ -17,11 +17,10 @@ import { APOLLO_STATE_PROP_NAME, GRAPHQL_ENDPOINT } from '~/graphql/constants'
 
 let apolloClient
 
-function createLink(headers: Record<string, string> = {}) {
+function createLink() {
   return new HttpLink({
     uri: GRAPHQL_ENDPOINT || '/api/graphql',
     credentials: 'include',
-    headers,
   })
 }
 
@@ -48,50 +47,52 @@ const errorLink = new ErrorLink(({ error }) => {
   }
 })
 
-export function createApolloClient({
-  initialState = {},
-  headers = {},
-}: {
-  initialState?: any
-  headers?: Record<string, string>
-}) {
-  const link = ApolloLink.from([errorLink, createLink(headers)])
-  const ssrMode = typeof window === 'undefined'
-  const cache = new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          bookmarks: relayStylePagination(['filter']),
-          questions: relayStylePagination(['filter']),
-          stacks: relayStylePagination(),
-          photographs: relayStylePagination(['filter']),
-        },
-      },
-      Comments: {
-        keyFields: ['id'],
-        fields: {
-          id: {
-            merge: false,
-          },
-        },
-      },
-      Bookmark: {
-        keyFields: ['id', 'url'],
-        fields: {
-          id: {
-            merge: false,
-          },
-          url: {
-            merge: false,
-          },
-        },
+const TYPE_POLICIES = {
+  Query: {
+    fields: {
+      bookmarks: relayStylePagination(['filter']),
+      questions: relayStylePagination(['filter']),
+      stacks: relayStylePagination(),
+      photographs: relayStylePagination(['filter']),
+    },
+  },
+  Comments: {
+    keyFields: ['id'],
+    fields: {
+      id: {
+        merge: false,
       },
     },
-  }).restore(initialState)
+  },
+  Bookmark: {
+    keyFields: ['id', 'url'],
+    fields: {
+      id: {
+        merge: false,
+      },
+      url: {
+        merge: false,
+      },
+    },
+  },
+} as const
+
+export function createApolloClient({
+  initialState = {},
+  link,
+}: {
+  initialState?: any
+  link?: ApolloLink
+} = {}) {
+  const finalLink = link ?? ApolloLink.from([errorLink, createLink()])
+  const ssrMode = typeof window === 'undefined'
+  const cache = new InMemoryCache({
+    typePolicies: TYPE_POLICIES,
+  }).restore(initialState ?? {})
 
   return new ApolloClient({
     ssrMode,
-    link,
+    link: finalLink,
     cache,
     ssrForceFetchDelay: 1000, // prevents immediate refetch of SSR queries on the client
   })
@@ -99,13 +100,13 @@ export function createApolloClient({
 
 export function initApolloClient({
   initialState = null,
-  headers = {},
+  link,
 }: {
   initialState?: any
-  headers?: Record<string, string>
-}) {
+  link?: ApolloLink
+} = {}) {
   const _apolloClient =
-    apolloClient ?? createApolloClient({ initialState, headers })
+    apolloClient ?? createApolloClient({ initialState, link })
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // gets hydrated here

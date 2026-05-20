@@ -6,8 +6,8 @@ import { withProviders } from '~/components/Providers/withProviders'
 import { PostsList } from '~/components/Writing/PostsList'
 import routes from '~/config/routes'
 import { GET_POSTS } from '~/graphql/queries/posts'
-import { GET_VIEWER } from '~/graphql/queries/viewer'
-import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { addApolloState } from '~/lib/apollo'
+import { initStaticApolloClient } from '~/lib/apollo/static'
 
 function WritingPage() {
   return (
@@ -19,23 +19,18 @@ function WritingPage() {
   )
 }
 
-export async function getServerSideProps({ req, res }) {
-  const apolloClient = initApolloClient({
-    headers: { cookie: req.headers.cookie ?? '' },
+export async function getStaticProps() {
+  const apolloClient = initStaticApolloClient()
+
+  await apolloClient.query({
+    query: GET_POSTS,
+    variables: { filter: { published: true } },
   })
 
-  await Promise.all([
-    apolloClient.query({ query: GET_VIEWER }),
-
-    apolloClient.query({
-      query: GET_POSTS,
-      variables: { filter: { published: true } },
-    }),
-  ])
-
-  return addApolloState(apolloClient, {
-    props: {},
-  })
+  return {
+    ...addApolloState(apolloClient, { props: {} }),
+    revalidate: 60,
+  }
 }
 
 WritingPage.getLayout = withProviders(function getLayout(page) {
