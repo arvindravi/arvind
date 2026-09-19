@@ -4,16 +4,22 @@ import React from 'react'
 // unminified). Each language is async-imported on demand via dynamic register
 // calls below.
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
-import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash'
-import css from 'react-syntax-highlighter/dist/esm/languages/prism/css'
-import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript'
-import json from 'react-syntax-highlighter/dist/esm/languages/prism/json'
-import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx'
-import markup from 'react-syntax-highlighter/dist/esm/languages/prism/markup'
-import swift from 'react-syntax-highlighter/dist/esm/languages/prism/swift'
-import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx'
-import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript'
-import yaml from 'react-syntax-highlighter/dist/esm/languages/prism/yaml'
+// Import the CJS builds, not the ESM ones. Next.js externalizes these deep
+// imports into the server (SSR) bundle, so they get `require()`d at request
+// time. The `dist/esm/**` files use `import`, which throws
+// "Cannot use import statement outside a module" on the production (Vercel)
+// Node runtime and 500s every code-containing detail route. The `dist/cjs/**`
+// builds are `require()`-clean and register the identical Prism grammars.
+import bash from 'react-syntax-highlighter/dist/cjs/languages/prism/bash'
+import css from 'react-syntax-highlighter/dist/cjs/languages/prism/css'
+import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript'
+import json from 'react-syntax-highlighter/dist/cjs/languages/prism/json'
+import jsx from 'react-syntax-highlighter/dist/cjs/languages/prism/jsx'
+import markup from 'react-syntax-highlighter/dist/cjs/languages/prism/markup'
+import swift from 'react-syntax-highlighter/dist/cjs/languages/prism/swift'
+import tsx from 'react-syntax-highlighter/dist/cjs/languages/prism/tsx'
+import typescript from 'react-syntax-highlighter/dist/cjs/languages/prism/typescript'
+import yaml from 'react-syntax-highlighter/dist/cjs/languages/prism/yaml'
 
 // Register only the languages we actually use across the site. Unknown
 // languages fall through to plain text — the highlighter logs a warning but
