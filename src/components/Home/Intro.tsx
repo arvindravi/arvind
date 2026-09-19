@@ -59,7 +59,7 @@ const workHistory = [
   {
     href: 'https://apple.com',
     title: '',
-    subtitle: 'iOS Engineer',
+    subtitle: 'Software Engineer',
     date: '2022—\u00a0\u00a0',
   },
   {
