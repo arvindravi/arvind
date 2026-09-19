@@ -101,7 +101,11 @@ export function Intro() {
                   <Link href="/writing" passHref>
                     writer
                   </Link>
-                  , software tinkerer, amateur photographer, and a terrible
+                  , software tinkerer, amateur{' '}
+                  <Link href="/photographs" passHref>
+                    photographer
+                  </Link>
+                  , and a terrible
                   musician.
                 </p>
                 <p>I also enjoy watching Formula 1 and making cocktails.</p>
