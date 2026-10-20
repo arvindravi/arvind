@@ -93,7 +93,6 @@
     "uuid": "^11.0.5"
   },
   "devDependencies": {
-    "@ardatan/graphql-tools": "^4.1.0",
     "@bahmutov/add-typescript-to-cypress": "^2.1.2",
     "@cypress/webpack-preprocessor": "^6.0.2",
     "@fullhuman/postcss-purgecss": "^7.0.2",
