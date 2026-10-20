@@ -68,12 +68,6 @@ const workHistory = [
     subtitle: 'iOS Engineer',
     date: '2019—22',
   },
-  {
-    href: 'https://swiftla.co',
-    title: 'Swiftla',
-    subtitle: 'Author',
-    date: '2020—\u00a0\u00a0',
-  },
 ]
 
 export function Intro() {
