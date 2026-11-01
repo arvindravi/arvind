@@ -82,7 +82,19 @@ export function PhotographDetail({ slug }) {
                   width={photograph.width}
                   height={photograph.height}
                   alt={photograph.title}
-                  sizes="(max-width: 768px) 100vw, 768px"
+                  // Detail panel width = viewport minus sidebar + list.
+                  // Sidebar is lg:w-56 2xl:w-72 3xl:w-80 (off-screen on mobile);
+                  // list is hidden below lg, then lg:w-80 xl:w-96. So the image
+                  // renders at ~100vw, -34rem, -38rem, -42rem, -44rem across
+                  // breakpoints — request the correct width instead of a flat
+                  // 768px that gets upscaled and looks soft on desktop.
+                  sizes={
+                    '(max-width: 1023px) 100vw,' +
+                    '(max-width: 1279px) calc(100vw - 34rem),' +
+                    '(max-width: 1535px) calc(100vw - 38rem),' +
+                    '(max-width: 1919px) calc(100vw - 42rem),' +
+                    'calc(100vw - 44rem)'
+                  }
                   className="h-auto w-full"
                 />
               </div>
