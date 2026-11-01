@@ -49,7 +49,10 @@ export async function getStaticProps({ params: { slug } }) {
     apolloClient.query({ query: GET_POSTS }),
     apolloClient.query({
       query: GET_COMMENTS,
-      variables: { refId: data.post.id, type: CommentType.Bookmark },
+      // Post detail renders post comments (PostDetail uses CommentType.Post),
+      // so prefetch them under that same variable set — otherwise the client
+      // query misses this cache entry and shows a spinner until it refetches.
+      variables: { refId: data.post.id, type: CommentType.Post },
     }),
   ])
 
